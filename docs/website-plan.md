@@ -2,8 +2,9 @@
 
 Client: Shalini Prajapati, Founder & Designer, SP Designs (Mansa, Gujarat)
 Source material: PORTFOLIO_SHALINI PRAJAPATI.pdf (29 pages), SHALINI_P_CV.pdf
-Status: Phase 1 in progress - Navbar and Hero built and reviewed; Services/Designs/Quotation/About/Contact
-still blank placeholder sections. See section 15 for current implementation status.
+Status: Phase 1 in progress - Navbar, Hero, Services, Designs, Quotation built and reviewed;
+About built and moved to its own route (see section 5); Contact still a blank placeholder
+section. See section 15 for current implementation status.
 Date: 2026-07-10 (last updated 2026-07-12)
 
 ## 1. Who the client is
@@ -55,8 +56,15 @@ Fallback: users with prefers-reduced-motion see the finished render instantly.
 ## 5. Sitemap / section order
 
 Revised 2026-07-12 per client nav requirements - nav bar links are Services, Designs, Quotation, About,
-Contact (Hero has no nav link, reached via logo/scroll-to-top). Section ids in code: hero, services,
-designs, quotation, about, contact.
+Contact (Hero has no nav link, reached via logo/scroll-to-top).
+
+Updated again 2026-07-12: **About was pulled out of the single-page scroll and moved to its own route**
+at `/about` (`src/app/about/page.tsx`), per explicit user request. This is a deliberate exception to the
+"single-page scroll experience" decision in section 9 - About is the only section that routes rather than
+scrolls. The navbar's About link now uses `next/link` to `/about` instead of an in-page `#about` anchor,
+and the logo now links to `/` (was `#hero`) so it resolves correctly from the new route. Section ids in
+code: `hero`, `services`, `designs`, `quotation`, `contact` on the homepage; `about` lives standalone on
+its own page.
 
 1. Hero - brand wordmark, tagline, signature draw-to-render animation, primary CTA.
 2. Services - what she offers (exterior visualization, interior visualization, 2D drafting, MEP-adjacent
@@ -66,7 +74,8 @@ designs, quotation, about, contact.
    flagship draw-to-render moment.
 4. Quotation - process + how-to-get-a-quote (absorbs the old "How I Work" 4-step process: brief -> 2D
    drawing -> 3D render -> execution), positioned as the step before Contact.
-5. About - short bio, credentials (Nirma, ISRO), tool badges.
+5. About (separate route `/about`, not a homepage scroll section) - short bio, credentials (Nirma, ISRO),
+   tool badges.
 6. Contact - email/phone/location (no inquiry funnel - chatbot owns lead capture, per section 9/13).
 
 Original 7-section breakdown (for reference on content that still needs a home within the sections above):
@@ -128,7 +137,8 @@ Implementation note: use Tailwind's `clamp()`-based fluid type utilities (or a s
 ## 9. Decisions (locked)
 
 - Scope: portfolio showcase only. Lead-gen handled separately by an integrated Vaayu Intelligence chatbot (not our contact-form build).
-- Structure: single-page scroll experience.
+- Structure: single-page scroll experience, with one explicit exception - About is a separate route
+  (`/about`), not a scroll section (added 2026-07-12, see section 5).
 - Assets: client will send high-res render exports later. For now, extract low-res renders from the PDF to build a blueprint.
 - Language: English only for now.
 - Contact section stays (email/phone/location) but no inquiry funnel - the chatbot owns lead capture.
@@ -141,7 +151,11 @@ Still to confirm later: domain/hosting (default Vercel), logo/wordmark (none exi
 - Phase 1 (IN PROGRESS): Section-by-section build (see section 12) - not a full-page build in one pass. Real copy, low-res renders extracted from PDF as placeholders (client hasn't sent real assets yet - proceeding with placeholders per section 7). Responsive at every step.
   - Navbar: DONE (see section 15).
   - Hero: DONE (see section 15).
-  - Services, Designs, Quotation, About, Contact: NOT STARTED - blank placeholder `<section>` blocks only.
+  - Services: DONE (see section 15) - built as flat list of 5 alternating rows, not grouped.
+  - Designs: DONE (see section 15) - filterable gallery grid.
+  - Quotation: DONE (see section 15) - 4-step process strip.
+  - About: DONE (see section 15) - moved to its own route `/about`, not a homepage scroll section.
+  - Contact: NOT STARTED - blank placeholder `<section>` block only.
 - Phase 2: Add Lenis + GSAP scroll animation on the 2-3 signature draw-to-render moments (once base sections exist).
 - Phase 3: Swap in high-res renders from client; performance + mobile fallbacks + reduced-motion + SEO.
 - Phase 4: Integrate Vaayu Intelligence chatbot; deploy to Vercel; client review.
@@ -203,9 +217,18 @@ this update).
   token from near-black (`#1a1815`) to a warm tan (`#a7895a`) - current code reflects the user's edits;
   treat `--ink` as **no longer a literal near-black text color** going forward.
 - Mobile: hamburger toggles a full-width `.nav-pill` dropdown below the bar with the same treatment.
-- Known open item: nav text is white, tuned for sitting over the dark hero. Once light-background
-  sections are built below the hero, white-on-white will be low contrast - needs a scroll-triggered state
-  (swap to solid/dark-text pill after the hero) when those sections are built. Not done yet.
+- Scroll-direction shrink behavior (added 2026-07-12): pill collapses into a 56x56px circle (logo
+  only, centered with padding so it doesn't look dense) pinned to the left edge at the same top
+  offset when the user scrolls down past 24px; scrolling up (or being near the very top) expands it
+  back to the full pill. Implemented via a throttled (`requestAnimationFrame`) scroll listener plus
+  `motion.nav layout` in `Navbar.tsx` for the FLIP-style width/shape morph. Nav links/hamburger are
+  hidden while collapsed.
+- Known open item: nav text is white, tuned for sitting over the dark hero. An earlier attempt added
+  a scroll-position-based swap to a solid `bg-ink` pill once past Hero, but the client asked to revert
+  that - the pill/circle must always keep the original gradient/grain/box-shadow `.nav-pill` treatment
+  regardless of section. So white-on-white contrast over light sections below Hero is still an open
+  problem, now with an explicit constraint: solve it without changing the pill's background treatment
+  (e.g. a dark-text logo/link variant, or an outline/shadow approach) rather than a background swap.
 
 ### Hero (`src/components/Hero.tsx`)
 
@@ -224,12 +247,80 @@ this update).
 - Big left-aligned Fraunces headline "Spaces, drawn / then rendered real.", eyebrow label, body copy, and
   a "View the work" CTA scrolling to `#services`, all with Framer Motion fade/rise-in on load.
 - `bg-gradient-to-r from-ink via-ink/40 to-transparent` overlay on the image for left-side text legibility.
+- Type-scale rebalance (2026-07-12): headline/body/eyebrow/CTA sizes were widened into a stronger
+  big/medium/small hierarchy using Hero-scoped inline `clamp()` values in `Hero.tsx` rather than
+  editing the shared `--font-size-*` tokens in `globals.css` (those tokens stay reserved for the
+  sitewide locked type scale in section 8, since Services etc. also read from them). Vertical spacing
+  between eyebrow/headline/body/CTA was also tightened and the old `pt-24` top offset removed so the
+  block reads as one compact, centered cluster instead of spreading down the viewport.
+- Copy: headline/eyebrow text has since been hand-edited by the client directly in `Hero.tsx`
+  ("Luxury is when it seems flawless" / "Interior Designing • SP Designs") - treat current file
+  content as the source of truth over what's quoted elsewhere in this doc.
+
+### Services (`src/components/Services.tsx`)
+
+- Built 2026-07-12 as a **flat list of 5** services (client explicitly chose flat over the 3-part
+  grouped workflow story - Visualization / Technical Drawing / Execution - that was proposed first).
+- Layout: alternating rows, image left/text right then image right/text left, stacking image-above-text
+  on mobile. Each row: numbered eyebrow (01-05), Fraunces title, Sora description, "See more" link CTA
+  (currently `href="#"` - not yet wired to a destination, needs a decision once Designs exists).
+- Images: no per-service renders exist yet: `public/images/hero.jpg` is reused as a temporary
+  placeholder in every row (different `object-position` per row so they don't look identical) -
+  swap for real renders once client sends high-res exports (section 7).
+- Motion: per-row scroll parallax (image drifts ±40px via `useScroll`/`useTransform`), word-by-word
+  staggered title reveal, and blur-in (`filter: blur(4px)→0`) fade/rise for eyebrow + description text,
+  all triggered via `whileInView` (once).
+- Even-row (reversed) text blocks use `md:ml-auto md:pl-2` so the text hugs the grid-gap boundary next
+  to the image, matching the odd rows' spacing exactly instead of leaving extra blank space to the
+  outer container edge.
+- Top section heading "From technical drawing to rendered space" uses a Services-scoped inline clamp
+  (up to 76px), larger than the shared `--font-size-h2` token, same pattern as Hero's scoped sizing.
+
+### Designs (`src/components/Designs.tsx`)
+
+- Built 2026-07-12 as a filterable gallery grid, not the full flagship draw-to-render moment (that's
+  Phase 2 per section 10 - GSAP work happens once base sections exist).
+- Filter pills: All / Exterior / Interior / Technical - client-side state, grid re-flows via Framer
+  Motion `layout` animation on filter change.
+- 8 project cards spanning the real categories from section 3 (Hyundai showroom, Swaminarayan hall,
+  residential facade, living/office/healthcare interiors, floor plan, joinery drawing).
+- Each card: per-card scroll parallax on the image (same `useScroll`/`useTransform` pattern as Services),
+  hover scale-up, dark gradient overlay revealing tag + title at the bottom, staggered fade/rise-in.
+- Images: `public/images/hero.jpg` placeholder reused per card with different `object-position` (same
+  temporary-asset pattern as Services - swap once client sends real renders, section 7).
+
+### Quotation (`src/components/Quotation.tsx`)
+
+- Built 2026-07-12, absorbs the old "How I Work" 4-step process per section 5: Brief -> 2D Drawing ->
+  3D Render -> Execution.
+- Layout: 4-column stepped strip (vertical stack on mobile, side-by-side with dividers on desktop), large
+  faded Fraunces numerals, staggered fade/rise-in plus a subtle per-card parallax.
+- Closing CTA row anchors to `#contact` on the homepage - no inquiry form (chatbot owns lead capture, per
+  section 9/13).
+
+### About (`src/components/About.tsx`, `src/app/about/page.tsx`)
+
+- Built 2026-07-12, then moved out of the homepage scroll into its own route `/about` per explicit user
+  request (see section 5 for the routing exception, section 9 for the updated locked decision).
+- `src/app/about/page.tsx`: renders `Navbar` + `About`, wrapped in `pt-28 md:pt-36` so content clears the
+  fixed floating nav pill with proper breathing room.
+- Content: image (placeholder render, same parallax pattern as Services/Designs) left / bio text right on
+  desktop, stacked on mobile. Bio covers the 2D-to-3D-to-execution positioning and the Mark Point role.
+  Credentials list (Nirma University B.E. Civil Engineering 2019-2023, ISRO internship) with staggered
+  reveal. Tool badges (AutoCAD, Revit, 3ds Max, V-Ray, QGIS, MS Office) as pill chips.
+- `Navbar.tsx` changes to support this: About link changed from `<a href="#about">` to `next/link`
+  `href="/about"` (conditional rendering in `NAV_LINKS.map` - `Link` for `/`-prefixed hrefs, plain `<a>`
+  for `#`-anchor hrefs); logo link changed from `<a href="#hero">` to `<Link href="/">` since `#hero`
+  doesn't resolve from `/about`.
+- Known open item (inherited from Navbar's original note): white nav text was tuned for the dark Hero
+  image. On `/about` the page background is paper/light with no hero image behind the nav, so the same
+  contrast risk noted in the Navbar section below applies here too if the pill's own gradient/shadow ever
+  gets lightened.
 
 ### Sitemap (superseded from the original plan - see section 5)
 
-Live section ids in `src/app/page.tsx`: `hero`, `services`, `designs`, `quotation`, `about`, `contact`.
-Only `hero` has real content; the rest are blank `<section className="min-h-screen bg-paper" />` placeholders
-per the section-12 build workflow, waiting to be built one at a time with pause-for-review between each.
+Live section ids in `src/app/page.tsx`: `hero`, `services`, `designs`, `quotation`, `contact`. All have
+real content. `About` lives on its own route at `src/app/about/page.tsx`. Next up: **Contact**.
 
 ### Bugs hit and fixed along the way (useful if similar patterns recur)
 

@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Services", href: "#services" },
   { label: "Designs", href: "#designs" },
   { label: "Quotation", href: "#quotation" },
-  { label: "About", href: "#about" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -62,28 +63,39 @@ export default function Navbar() {
             : "w-full max-w-3xl justify-between px-6 py-3 md:px-8"
         }`}
       >
-        <a
-          href="#hero"
+        <Link
+          href="/"
           className={`relative z-10 flex shrink-0 items-center gap-2.5 ${
             collapsed ? "p-2.5" : ""
           }`}
         >
           <Image src="/logo.svg" alt="" width={40} height={40} style={{ height: "auto" }} />
-        </a>
+        </Link>
 
         {!collapsed && (
           <>
             <ul className="relative z-10 hidden items-center gap-8 md:flex">
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {NAV_LINKS.map((link) =>
+                link.href.startsWith("/") ? (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ) : (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                )
+              )}
             </ul>
 
             <button
@@ -113,17 +125,29 @@ export default function Navbar() {
       {open && !collapsed && (
         <div className="nav-pill absolute top-[calc(100%+0.5rem)] w-[calc(100%-2rem)] max-w-3xl rounded-3xl px-6 py-5 [text-shadow:0_1px_10px_rgba(10,15,30,0.35)] md:hidden">
           <ul className="relative z-10 flex flex-col gap-4">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="font-sans text-[var(--font-size-nav)] font-medium text-white/90"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+            {NAV_LINKS.map((link) =>
+              link.href.startsWith("/") ? (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="font-sans text-[var(--font-size-nav)] font-medium text-white/90"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ) : (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="font-sans text-[var(--font-size-nav)] font-medium text-white/90"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              )
+            )}
           </ul>
         </div>
       )}
