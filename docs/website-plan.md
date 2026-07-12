@@ -2,9 +2,9 @@
 
 Client: Shalini Prajapati, Founder & Designer, SP Designs (Mansa, Gujarat)
 Source material: PORTFOLIO_SHALINI PRAJAPATI.pdf (29 pages), SHALINI_P_CV.pdf
-Status: Phase 1 in progress - Navbar, Hero, Services, Designs, Quotation built and reviewed;
-About built and moved to its own route (see section 5); Contact still a blank placeholder
-section. See section 15 for current implementation status.
+Status: Phase 1 complete - Navbar, Hero, Services, Designs, Quotation, Contact built on the
+homepage; About built and moved to its own route (see section 5). All sitemap sections have
+real content. See section 15 for current implementation status.
 Date: 2026-07-10 (last updated 2026-07-12)
 
 ## 1. Who the client is
@@ -148,14 +148,14 @@ Still to confirm later: domain/hosting (default Vercel), logo/wordmark (none exi
 ## 10. Phasing
 
 - Phase 0: DONE - scope confirmed, decisions locked; animation stack confirmed (2026-07-12).
-- Phase 1 (IN PROGRESS): Section-by-section build (see section 12) - not a full-page build in one pass. Real copy, low-res renders extracted from PDF as placeholders (client hasn't sent real assets yet - proceeding with placeholders per section 7). Responsive at every step.
+- Phase 1: DONE - Section-by-section build (see section 12) - not a full-page build in one pass. Real copy, low-res renders extracted from PDF as placeholders (client hasn't sent real assets yet - proceeding with placeholders per section 7). Responsive at every step.
   - Navbar: DONE (see section 15).
   - Hero: DONE (see section 15).
   - Services: DONE (see section 15) - built as flat list of 5 alternating rows, not grouped.
   - Designs: DONE (see section 15) - filterable gallery grid.
   - Quotation: DONE (see section 15) - 4-step process strip.
   - About: DONE (see section 15) - moved to its own route `/about`, not a homepage scroll section.
-  - Contact: NOT STARTED - blank placeholder `<section>` block only.
+  - Contact: DONE (see section 15) - email/phone/location detail grid, chatbot mount point, footer row.
 - Phase 2: Add Lenis + GSAP scroll animation on the 2-3 signature draw-to-render moments (once base sections exist).
 - Phase 3: Swap in high-res renders from client; performance + mobile fallbacks + reduced-motion + SEO.
 - Phase 4: Integrate Vaayu Intelligence chatbot; deploy to Vercel; client review.
@@ -317,10 +317,20 @@ this update).
   contrast risk noted in the Navbar section below applies here too if the pill's own gradient/shadow ever
   gets lightened.
 
+### Contact (`src/components/Contact.tsx`)
+
+- Built 2026-07-12, closes out the homepage scroll.
+- Detail grid: Email (`mailto:`), Phone (`tel:`), Location - 3 columns on desktop, stacked on mobile, each
+  with staggered fade/rise-in. Values sourced from section 2 (client CV facts).
+- No inquiry form per section 9/13 - added an empty `#chatbot-mount` div as the reserved embed slot for
+  the Vaayu Intelligence chatbot instead.
+- Simple footer row (brand name + auto-generated copyright year) closes the section.
+
 ### Sitemap (superseded from the original plan - see section 5)
 
 Live section ids in `src/app/page.tsx`: `hero`, `services`, `designs`, `quotation`, `contact`. All have
-real content. `About` lives on its own route at `src/app/about/page.tsx`. Next up: **Contact**.
+real content. `About` lives on its own route at `src/app/about/page.tsx`. **Phase 1 is complete** - next
+up is Phase 2 (GSAP draw-to-render signature moments, see section 10).
 
 ### Bugs hit and fixed along the way (useful if similar patterns recur)
 

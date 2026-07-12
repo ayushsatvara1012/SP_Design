@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import Designs from "@/components/Designs";
 import Quotation from "@/components/Quotation";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
       <Services />
       <Designs />
       <Quotation />
-      <section id="contact" className="min-h-screen bg-paper" />
+      <Contact />
     </main>
   );
 }
