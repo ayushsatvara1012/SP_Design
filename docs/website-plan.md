@@ -46,12 +46,33 @@ Mechanism:
 - Once the outline completes, cross-fade the photoreal 3D render on top.
 - Optional watercolor/color-blob accents fade + scale in (matches the reference image aesthetic).
 
-Where it appears (used sparingly, 2-3 hero moments - not every section):
-- Hero: signature space draws itself on load + first scroll.
-- Section transition into Interior gallery: one flagship room drawn then rendered.
-- "How I work" strip: 2D plan -> 3D render reveal that literally sells the service.
+Where it appears (used sparingly, 2-3 moments - not every section):
+- **Services ("What I Do") - DONE, see section 15.** Revised placement (2026-07-12): originally planned for
+  Hero, moved here instead per explicit user request - Hero already felt finished, and the client wanted
+  this moment to draw attention inside the section that explains the service, not the entry screen.
+- Still open, location(s) TBD: a second signature moment, likely Designs gallery transition or the
+  Quotation "How I work" strip (2D plan -> 3D render reveal) - not yet built, revisit once this first one
+  is reviewed.
 
 Fallback: users with prefers-reduced-motion see the finished render instantly.
+
+Implementation note (2026-07-12): the actual asset used, `public/images/hero.jpg`, turned out to already be
+a genuine diagonal sketch/render split of the *same room* (not a separate traced SVG line-art file, which
+doesn't exist yet - see section 7 asset bottleneck). So instead of stroke-dashoffset path drawing, the
+Services moment is a scroll-scrubbed clip-path wipe that progressively reveals more of that single image
+(sketch side first, render side second), which is asset-honest and needed no new art. If/when a real traced
+SVG line-art asset arrives from the client, a literal stroke-drawing version can replace this for the next
+signature moment.
+
+Update (2026-07-12): the traced SVG line-art asset arrived - `public/images/interior_sketch.svg` (868
+separate stroke paths, viewBox 0 0 2816 1536, a living-room interior). So the real stroke-dashoffset
+draw-on-scroll is now built as its own section **directly under Hero** (`InteriorSketch.tsx`, section id
+`process`), and the earlier clip-path stand-in (`ServicesSignature.tsx`) was **removed** - this true
+stroke-draw is now THE signature moment (per explicit user decision, "replace it"). Chosen behaviour
+(user-selected): sequential hand-drawn feel (paths drawn longest-first so structural gestures lead and
+fine details trail), pinned scrub on desktop, and after the drawing completes a set of restrained
+indigo/green watercolor accent blobs bloom in (the reference aesthetic) - not a photoreal render fade
+(no matching per-room render exists yet). See section 15 for the component details.
 
 ## 5. Sitemap / section order
 
@@ -156,7 +177,8 @@ Still to confirm later: domain/hosting (default Vercel), logo/wordmark (none exi
   - Quotation: DONE (see section 15) - 4-step process strip.
   - About: DONE (see section 15) - moved to its own route `/about`, not a homepage scroll section.
   - Contact: DONE (see section 15) - email/phone/location detail grid, chatbot mount point, footer row.
-- Phase 2: Add Lenis + GSAP scroll animation on the 2-3 signature draw-to-render moments (once base sections exist).
+- Phase 2: IN PROGRESS - Add Lenis + GSAP scroll animation on the signature draw-to-render moment(s) (once base sections exist).
+  - Services signature reveal: DONE (see section 15) - relocated from the original Hero/Designs placement to a pinned moment inside Services, per explicit user request ("Hero already feels done", wants it to "draw attention" in the What-I-Do section instead).
 - Phase 3: Swap in high-res renders from client; performance + mobile fallbacks + reduced-motion + SEO.
 - Phase 4: Integrate Vaayu Intelligence chatbot; deploy to Vercel; client review.
 
@@ -270,6 +292,74 @@ this update).
 - Motion: per-row scroll parallax (image drifts ±40px via `useScroll`/`useTransform`), word-by-word
   staggered title reveal, and blur-in (`filter: blur(4px)→0`) fade/rise for eyebrow + description text,
   all triggered via `whileInView` (once).
+
+### Interior sketch draw-to-render (`src/components/InteriorSketch.tsx`) - Phase 2, built 2026-07-12
+
+- The real stroke-dashoffset "live sketching" signature moment, placed as its own section (`id="process"`)
+  **directly under Hero** in `src/app/page.tsx`, above Services.
+- Asset: `public/images/interior_sketch.svg` (868 separate stroke paths, living-room interior, viewBox
+  0 0 2816 1536). The paths were extracted at build-authoring time into a data module
+  `src/components/interiorSketchPaths.ts` (`INTERIOR_SKETCH_PATHS: { d, w }[]`, `w` = stroke-width, default
+  1 for the 11 paths with no explicit width) via a one-off node regex over the SVG - so the component maps
+  real `<path>` DOM nodes it can drive with GSAP, no runtime fetch / no SVGR build config. Re-run that
+  extraction if the SVG is re-exported.
+- Mechanism: on mount, `getTotalLength()` per path sets `strokeDasharray`/`strokeDashoffset` to hide each
+  stroke, then a GSAP timeline animates offset -> 0. Draw order = **longest strokes first** (walls/floor/
+  big furniture gestures lead, short detail ticks trail) for a hand-roughing-a-sketch feel, with heavy
+  overlap (`OVERLAP = 24`) so ~2 dozen strokes draw at once rather than one-at-a-time. Strokes rendered in
+  a warm graphite `#2e2a25` on `bg-paper` (pencil-on-paper, not the tan `--ink` token which is too light
+  to read as line-art).
+- End state (user-selected, revised 2026-07-12): **photoreal render cross-fade** - the client added a real
+  render `public/images/Interior_sketch.png` (2816x1536, **pixel-identical to the SVG viewBox**, so it lands
+  exactly registered on the drawn lines). After the drawing completes, the render cross-fades in over the
+  finished sketch (opacity 0 -> 1 with a subtle 1.04 -> 1 settle, `FADE = 2.6`s starting at `DRAW*0.85`),
+  **fully replacing** the sketch lines - "drawing becomes the built space." The earlier watercolor-accent
+  ending was **removed** per this change. Fade is **scroll-scrubbed** (part of the pinned timeline, reverses
+  on scroll up), consistent with the draw. Fraunces caption "From a single line to a living space." still
+  fades in near the end.
+- Layout (revised 2026-07-12): **full-bleed, no padding** - the SVG + render fill the stage edge-to-edge
+  (`preserveAspectRatio="xMidYMid slice"` on the SVG + `object-cover` on the image, so both crop identically
+  since they share the 2816x1536 frame). Desktop: **crop-to-fill** full screen. Mobile: the stage is an
+  exact-aspect full-width band (`aspect-[2816/1536]`, `md:aspect-auto md:h-screen`) so nothing is cropped
+  (user chose "cover desktop, fit mobile").
+- Desktop (`768px+`): the stage is **CSS `sticky top-0 h-screen`** (not a GSAP pin anymore) and the draw +
+  render fade are a scrubbed timeline (`scrub: 0.8`, wrapper `300vh`). ScrollTrigger `start: "top 70%"` so
+  the first strokes appear while the section is still scrolling in - the user never lands on a blank
+  full-screen frame (the reason for the sticky-over-pin switch: a GSAP pin can only start at "top top",
+  which forced progress=0 / blank at the moment of pinning). Mobile (`<768px`): no sticky/scrub (mobile
+  motion policy), same draw plays once on scroll-in (`start: "top 70%"`, `toggleActions: "play none none
+  none"`). `prefers-reduced-motion`: skips GSAP, sets all strokes drawn + render/caption visible immediately.
+- Relies on the existing Lenis+GSAP ScrollTrigger wiring in `SmoothScrollProvider.tsx` (added for the old
+  ServicesSignature) - unchanged.
+
+### Services signature reveal (REMOVED - was `src/components/ServicesSignature.tsx`) - superseded 2026-07-12
+
+- The clip-path wipe stand-in on `hero.jpg` was **deleted** and its mount removed from `Services.tsx` once
+  the real traced `interior_sketch.svg` arrived; `InteriorSketch.tsx` (above) is now the single signature
+  moment. Original notes retained below for history.
+
+- First GSAP + ScrollTrigger pinned signature moment, sits between the Services heading and the 5 rows
+  (breaks out of the `max-w-[1400px]` column so it reads as wider/more prominent than the row content -
+  "draw attention" was the explicit ask, see section 4 for why it's here instead of Hero).
+- Asset: reuses `public/images/hero.jpg` as-is (no new SVG line-art - none exists yet, section 7). That
+  file is already a genuine diagonal sketch/render split of the same room, so the effect is a scroll-
+  scrubbed CSS `clip-path: inset()` wipe that reveals more of the image left-to-right as the user scrolls
+  through a pinned `100vh` stage - sketch side revealed first, render side second, tracking a thin
+  accent-indigo "edge" line across the boundary, with a small "Sketch → Render" caption fading in near
+  the end. This is a wipe-reveal of one real image, not a true multi-path stroke-dashoffset draw - swap
+  for literal path-drawing if/when a traced SVG line-art asset arrives from the client (see section 4 note).
+- Desktop (`md:` and up, `768px+`): pinned via `ScrollTrigger` (`pin: stageRef`, `scrub: 0.6`, wrapper
+  reserves `200vh` of scroll distance) using `gsap.matchMedia()` to scope the pin to desktop only.
+- Mobile (`<768px`): no pin (per the locked mobile motion policy in section 6/10 - pinned sequences are
+  perf/jank risk on small screens) - same clip-path wipe instead plays once, non-scrubbed, on a plain
+  `ScrollTrigger` `toggleActions: "play none none none"` trigger.
+- `prefers-reduced-motion`: skips GSAP entirely, sets the image to its fully-revealed end state immediately.
+- **Lenis/GSAP sync added to `SmoothScrollProvider.tsx`**: this is the first component needing accurate
+  pinning under Lenis's virtualized scroll, so the provider now registers `ScrollTrigger`, feeds
+  `lenis.on("scroll", ScrollTrigger.update)`, and drives Lenis's raf loop from `gsap.ticker` (with
+  `lagSmoothing(0)`) instead of Lenis's own `autoRaf` - the standard Lenis+GSAP ScrollTrigger integration
+  pattern. Any future pinned GSAP sequence (Designs/Quotation, if/when built) relies on this same wiring
+  already being in place - don't reintroduce `autoRaf: true` or you'll get two competing raf loops.
 - Even-row (reversed) text blocks use `md:ml-auto md:pl-2` so the text hugs the grid-gap boundary next
   to the image, matching the odd rows' spacing exactly instead of leaving extra blank space to the
   outer container edge.

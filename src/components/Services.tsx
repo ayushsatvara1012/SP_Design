@@ -181,12 +181,14 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
-          className="font-display mt-4 max-w-3xl text-[clamp(2.25rem,1.6rem+3.2vw,4.75rem)] font-light leading-tight tracking-tight text-ink"
+          className="font-display mt-4 max-w-4xl text-[clamp(2.25rem,1.6rem+3.2vw,4.75rem)] font-light leading-tight tracking-tight text-ink"
         >
           From technical drawing to rendered space
         </motion.h2>
+      </div>
 
-        <div className="mt-6 divide-y divide-ink/10">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="divide-y divide-ink/10">
           {services.map((service, index) => (
             <ServiceRow key={service.number} service={service} index={index} />
           ))}
