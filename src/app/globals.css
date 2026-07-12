@@ -2,7 +2,7 @@
 
 :root {
   --paper: #faf8f4;
-  --ink: #a7895a;
+  --ink: #887049;
   --accent-indigo: #4b4a7a;
   --accent-green: #5c6e52;
 }
@@ -62,7 +62,6 @@ html::-webkit-scrollbar {
     color-mix(in srgb, var(--accent-indigo) 40%, var(--ink)) 55%,
     var(--ink) 100%
   );
-  border: 1px solid color-mix(in srgb, var(--paper) 18%, transparent);
   box-shadow:
     0 8px 30px color-mix(in srgb, var(--ink) 28%, transparent),
     inset 1px 1px 1px color-mix(in srgb, #fdf6ed 60%, var(--paper)),
