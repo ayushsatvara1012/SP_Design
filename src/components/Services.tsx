@@ -12,6 +12,7 @@ type Service = {
   title: string;
   description: string;
   focalPosition: string;
+  href: string;
 };
 
 const services: Service[] = [
@@ -21,6 +22,7 @@ const services: Service[] = [
     description:
       "Photorealistic facades — modern and traditional residences, commercial builds like the Hyundai showroom, and institutional spaces like the Swaminarayan hall.",
     focalPosition: "20% 30%",
+    href: "/work#exterior",
   },
   {
     number: "02",
@@ -28,6 +30,7 @@ const services: Service[] = [
     description:
       "Immersive interior renders across residential living spaces, office interiors, and healthcare reception areas — every material and light captured before a wall is built.",
     focalPosition: "70% 40%",
+    href: "/work#interior",
   },
   {
     number: "03",
@@ -35,6 +38,7 @@ const services: Service[] = [
     description:
       "Space planning, layout drawings, residential floor plans, and elevations — the precise technical foundation every render is built on.",
     focalPosition: "40% 70%",
+    href: "/work#technical",
   },
   {
     number: "04",
@@ -42,6 +46,7 @@ const services: Service[] = [
     description:
       "Electrical layouts and ceiling layouts that support the drafting work, keeping execution teams aligned with the design intent.",
     focalPosition: "60% 20%",
+    href: "/work#technical",
   },
   {
     number: "05",
@@ -49,6 +54,7 @@ const services: Service[] = [
     description:
       "2D furniture drawings derived directly from 3D renders — kitchens, TV units, and joinery — bridging visualization back to fabrication.",
     focalPosition: "30% 55%",
+    href: "/work#technical",
   },
 ];
 
@@ -117,7 +123,7 @@ function ServiceRow({ service, index }: { service: Service; index: number }) {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="eyebrow inline-block text-ink/50"
+          className="eyebrow inline-block text-ink/70"
         >
           {service.number}
         </motion.span>
@@ -143,20 +149,21 @@ function ServiceRow({ service, index }: { service: Service; index: number }) {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="mt-4 text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/70"
+          className="mt-4 text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/85"
         >
           {service.description}
         </motion.p>
 
         <MotionLink
-          href="/work"
+          href={service.href}
+          scroll={false}
           aria-label={`See ${service.title} work`}
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
           whileHover={{ gap: "0.6rem" }}
-          className="eyebrow mt-6 inline-flex items-center gap-2 text-ink transition-colors hover:text-ink/70"
+          className="eyebrow mt-6 inline-flex items-center gap-2 text-ink transition-colors hover:text-ink/85"
         >
           See more
           <span aria-hidden>→</span>
@@ -175,7 +182,7 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="eyebrow text-ink/60"
+          className="eyebrow text-ink/75"
         >
           What I Do
         </motion.p>
