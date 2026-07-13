@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Services", href: "#services" },
@@ -13,10 +13,26 @@ const NAV_LINKS = [
   { label: "Contact", href: "#contact" },
 ];
 
+const HEADER_PADDING_X = 16; // px, matches header's px-4
+const MAX_EXPANDED_WIDTH = 768; // px, matches max-w-3xl
+const COLLAPSED_SIZE = 64; // px, matches h-16 w-16
+const FINAL_LEFT_INSET = 4; // px, resting gap from the header's inner edge
+const TOGGLE_DURATION = 0.5; // seconds, total accordion + slide duration
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(0);
   const lastScrollY = useRef(0);
+  const prevCollapsed = useRef(collapsed);
+  const [phase, setPhase] = useState<"closing" | "opening" | null>(null);
+
+  useEffect(() => {
+    const updateWidth = () => setViewportWidth(window.innerWidth);
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -48,78 +64,128 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (prevCollapsed.current === collapsed) return;
+    prevCollapsed.current = collapsed;
+    setPhase(collapsed ? "closing" : "opening");
+    const t = setTimeout(() => setPhase(null), TOGGLE_DURATION * 1000 + 20);
+    return () => clearTimeout(t);
+  }, [collapsed]);
+
+  const { expandedWidth, collapsedX } = useMemo(() => {
+    const headerInnerWidth = Math.max(viewportWidth - HEADER_PADDING_X * 2, COLLAPSED_SIZE);
+    const width = Math.min(headerInnerWidth, MAX_EXPANDED_WIDTH);
+    const centeredOffset = (headerInnerWidth - COLLAPSED_SIZE) / 2;
+    return { expandedWidth: width, collapsedX: FINAL_LEFT_INSET - centeredOffset };
+  }, [viewportWidth]);
+
+  const targetWidth = collapsed ? COLLAPSED_SIZE : expandedWidth;
+  const targetX = collapsed ? collapsedX : 0;
+
+  // Real width is interpolated (no scale transform), so the pill folds shut/open
+  // like an accordion without distorting its rounded ends or its children.
+  // The horizontal slide only kicks in near the end of closing (and leads on
+  // opening), so the two gestures read as one continuous, seamless motion.
+  const widthAnimate = phase ? [null, ...(phase === "closing" ? [COLLAPSED_SIZE] : [COLLAPSED_SIZE, expandedWidth])] : targetWidth;
+  const xAnimate = phase ? [null, ...(phase === "closing" ? [0, collapsedX] : [0])] : targetX;
+
+  const widthTransition =
+    phase === "closing"
+      ? { duration: TOGGLE_DURATION, times: [0, 0.85], ease: "easeInOut" as const }
+      : phase === "opening"
+        ? {
+            duration: TOGGLE_DURATION,
+            times: [0, 0.15, 1],
+            ease: ["linear", "easeInOut"] as ["linear", "easeInOut"],
+          }
+        : { duration: 0.3, ease: "easeInOut" as const };
+
+  const xTransition =
+    phase === "closing"
+      ? {
+          duration: TOGGLE_DURATION,
+          times: [0, 0.7, 1],
+          ease: ["linear", "easeOut"] as ["linear", "easeOut"],
+        }
+      : phase === "opening"
+        ? { duration: TOGGLE_DURATION, times: [0, 0.35], ease: "easeOut" as const }
+        : { duration: 0.3, ease: "easeInOut" as const };
+
   return (
-    <header
-      className={`fixed inset-x-0 top-5 z-50 flex px-4 transition-[justify-content] duration-500 ${
-        collapsed ? "justify-start pl-5" : "justify-center"
-      }`}
-    >
+    <header className="fixed inset-x-0 top-5 z-50 flex justify-center px-4">
       <motion.nav
-        layout
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className={`nav-pill relative flex items-center gap-6 overflow-hidden rounded-full [text-shadow:0_1px_10px_rgba(10,15,30,0.35)] ${
-          collapsed
-            ? "h-14 w-14 justify-center gap-0 px-0 py-0"
-            : "w-full max-w-3xl justify-between px-6 py-3 md:px-8"
+        initial={false}
+        animate={{ width: widthAnimate, x: xAnimate }}
+        transition={{ width: widthTransition, x: xTransition }}
+        className={`nav-pill relative flex h-16 items-center gap-6 overflow-hidden rounded-full [text-shadow:0_1px_10px_rgba(10,15,30,0.35)] ${
+          collapsed ? "justify-center gap-0 px-0" : "justify-between px-6 md:px-8"
         }`}
       >
         <Link
           href="/"
           className={`relative z-10 flex shrink-0 items-center gap-2.5 ${
-            collapsed ? "p-2.5" : ""
+            collapsed ? "p-3" : ""
           }`}
         >
           <Image src="/logo.svg" alt="" width={40} height={40} style={{ height: "auto" }} />
         </Link>
 
-        {!collapsed && (
-          <>
-            <ul className="relative z-10 hidden items-center gap-8 md:flex">
-              {NAV_LINKS.map((link) =>
-                link.href.startsWith("/") ? (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ) : (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                )
-              )}
-            </ul>
-
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-              aria-label="Toggle navigation menu"
-              className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full md:hidden"
+        <AnimatePresence initial={false}>
+          {!collapsed && (
+            <motion.div
+              key="nav-content"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 0.2, delay: 0.28, ease: "easeOut" } }}
+              exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeIn" } }}
+              className="relative z-10 ml-auto flex items-center gap-8"
             >
-              <span className="relative block h-3.5 w-4">
-                <span
-                  className={`absolute left-0 top-0 h-[1.5px] w-full bg-white transition-transform ${
-                    open ? "translate-y-[6.5px] rotate-45" : ""
-                  }`}
-                />
-                <span
-                  className={`absolute left-0 bottom-0 h-[1.5px] w-full bg-white transition-transform ${
-                    open ? "-translate-y-[6.5px] -rotate-45" : ""
-                  }`}
-                />
-              </span>
-            </button>
-          </>
-        )}
+              <ul className="hidden items-center gap-8 md:flex">
+                {NAV_LINKS.map((link) =>
+                  link.href.startsWith("/") ? (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ) : (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  )
+                )}
+              </ul>
+
+              <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-label="Toggle navigation menu"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full md:hidden"
+              >
+                <span className="relative block h-3.5 w-4">
+                  <span
+                    className={`absolute left-0 top-0 h-[1.5px] w-full bg-white transition-transform ${
+                      open ? "translate-y-[6.5px] rotate-45" : ""
+                    }`}
+                  />
+                  <span
+                    className={`absolute left-0 bottom-0 h-[1.5px] w-full bg-white transition-transform ${
+                      open ? "-translate-y-[6.5px] -rotate-45" : ""
+                    }`}
+                  />
+                </span>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       {open && !collapsed && (
