@@ -62,7 +62,7 @@ html::-webkit-scrollbar {
   background: linear-gradient(
     135deg,
     #8c714b 0%,
-    color-mix(in srgb, var(--accent-indigo) 40%, var(--ink)) 55%,
+    color-mix(in srgb, #ffffff 40%, var(--ink)) 55%,
     var(--ink) 100%
   );
   box-shadow:

@@ -5,5 +5,9 @@ export const metadata = {
 };
 
 export default function AboutPage() {
-  return <About />;
+  return (
+    <div className="pt-20 md:pt-28">
+      <About />
+    </div>
+  );
 }

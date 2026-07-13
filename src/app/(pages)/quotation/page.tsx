@@ -5,5 +5,9 @@ export const metadata = {
 };
 
 export default function QuotationPage() {
-  return <Quotation />;
+  return (
+    <div className="pt-20 md:pt-28">
+      <Quotation />
+    </div>
+  );
 }

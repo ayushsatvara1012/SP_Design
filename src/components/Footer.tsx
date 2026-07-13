@@ -96,7 +96,7 @@ export default function Footer() {
                 </span>
                 <a
                   href="mailto:spdesigns28@gmail.com"
-                  className="font-display text-sm font-medium text-ink block"
+                  className="font-display text-[clamp(0.875rem,0.82rem+0.2vw,1.0625rem)] font-medium text-ink block"
                 >
                   spdesigns28@gmail.com
                 </a>
@@ -110,7 +110,7 @@ export default function Footer() {
                 </span>
                 <a
                   href="tel:+918980775017"
-                  className="font-display text-sm font-medium text-ink block"
+                  className="font-display text-[clamp(0.875rem,0.82rem+0.2vw,1.0625rem)] font-medium text-ink block"
                 >
                   +91 89807 75017
                 </a>
@@ -123,7 +123,7 @@ export default function Footer() {
                     <circle cx="12" cy="10" r="3" />
                   </svg>
                 </span>
-                <p className="font-display text-sm font-medium text-ink leading-relaxed max-w-[240px]">
+                <p className="font-display text-[clamp(0.875rem,0.82rem+0.2vw,1.0625rem)] font-medium text-ink leading-relaxed max-w-[240px]">
                   SJ Farm House, behind SJ Traders, Kalol-Mansa Road, Mansa, Gujarat
                 </p>
               </div>
@@ -136,9 +136,12 @@ export default function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 text-ink/50"
+          className="mt-8 text-ink/50 flex justify-around items-center"
         >
           <span className="eyebrow">© {new Date().getFullYear()} SP Designs. All rights reserved.</span>
+          <a href="https://sapybase.com" target="_blank" rel="noopener noreferrer" className="eyebrow">
+            Designed by Sapybase
+          </a>
         </motion.div>
       </div>
     </footer>
