@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 
 const FOOTER_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Work", href: "/#designs" },
-  { label: "Quotation", href: "/#quotation" },
+  { label: "Work", href: "/work" },
+  { label: "Quotation", href: "/quotation" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/#contact" },
 ];
@@ -22,7 +22,7 @@ const SERVICES_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-paper px-6 pb-10 pt-14 md:px-14 md:pb-14 md:pt-20">
+    <footer id="contact" className="relative overflow-hidden bg-paper px-6 pb-10 pt-14 md:px-14 md:pb-14 md:pt-20 scroll-mt-24">
       <svg
         viewBox="0 0 20 14"
         className="pointer-events-none absolute bottom-[5%] right-[4%] z-0 aspect-[20/14] w-[min(70vw,600px)] text-ink/[0.08]"
@@ -53,7 +53,7 @@ export default function Footer() {
           </span>
 
           <nav aria-label="Explore Navigation">
-            <span className="font-sans text-[clamp(0.8125rem,0.78rem+0.12vw,0.875rem)] font-medium tracking-wider text-ink/50 uppercase">Explore</span>
+            <span className="font-sans text-[clamp(0.8125rem,0.78rem+0.12vw,0.875rem)] font-medium tracking-wider text-ink/70 uppercase">Explore</span>
             <ul className="mt-4 flex flex-col gap-3">
               {FOOTER_LINKS.map((link) => (
                 <li key={link.href}>
@@ -69,7 +69,7 @@ export default function Footer() {
           </nav>
 
           <nav aria-label="Services Navigation">
-            <span className="font-sans text-[clamp(0.8125rem,0.78rem+0.12vw,0.875rem)] font-medium tracking-wider text-ink/50 uppercase ">Services</span>
+            <span className="font-sans text-[clamp(0.8125rem,0.78rem+0.12vw,0.875rem)] font-medium tracking-wider text-ink/70 uppercase ">Services</span>
             <ul className="mt-4 flex flex-col gap-3 max-w-[280px]">
               {SERVICES_LINKS.map((link) => (
                 <li key={link.label}>
@@ -85,7 +85,7 @@ export default function Footer() {
           </nav>
 
           <nav aria-label="Contact Navigation">
-            <span className="font-sans text-[clamp(0.8125rem,0.78rem+0.12vw,0.875rem)] font-medium tracking-wider text-ink/50 uppercase">Contact</span>
+            <span className="font-sans text-[clamp(0.8125rem,0.78rem+0.12vw,0.875rem)] font-medium tracking-wider text-ink/70 uppercase">Contact</span>
             <div className="mt-6 flex flex-col gap-4">
               <div className="flex items-center gap-3">
                 <span className="text-ink shrink-0" aria-hidden>
@@ -136,7 +136,7 @@ export default function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 text-ink/50 flex justify-around items-center"
+          className="mt-8 flex flex-col items-center gap-3 text-center text-ink/70 sm:flex-row sm:justify-between sm:text-left"
         >
           <span className="eyebrow">© {new Date().getFullYear()} SP Designs. All rights reserved.</span>
           <a href="https://sapybase.com" target="_blank" rel="noopener noreferrer" className="eyebrow">

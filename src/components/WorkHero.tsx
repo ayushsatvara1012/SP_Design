@@ -21,7 +21,7 @@ export default function WorkHero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen w-full items-center overflow-hidden bg-ink"
+      className="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-ink"
     >
       <motion.div className="absolute inset-[-4%]" style={{ y: scrollYSpring }}>
         <Image

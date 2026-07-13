@@ -55,7 +55,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.4 }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
-      className="relative border-t border-ink/10 py-8 first:border-t-0 md:border-t-0 md:border-l md:px-8 md:py-0"
+      className="relative border-t border-ink/10 py-8 first:border-t-0 lg:border-t-0 lg:border-l lg:px-8 lg:py-0 lg:first:border-l-0 lg:first:pl-0"
     >
       <span className="font-display text-[clamp(2.5rem,2rem+2vw,3.5rem)] font-light leading-none text-ink/20">
         {step.number}
@@ -63,7 +63,7 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       <h3 className="font-display mt-4 text-[clamp(1.5rem,1.3rem+0.8vw,2rem)] font-light leading-tight text-ink">
         {step.title}
       </h3>
-      <p className="mt-3 max-w-xs text-[clamp(0.9375rem,0.9rem+0.1vw,1rem)] text-ink/70">
+      <p className="mt-3 max-w-xs text-[clamp(0.9375rem,0.9rem+0.1vw,1rem)] text-ink/85">
         {step.description}
       </p>
     </motion.div>
@@ -79,7 +79,7 @@ export default function Quotation() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="eyebrow text-ink/60"
+          className="eyebrow text-ink/75"
         >
           How To Get A Quote
         </motion.p>
@@ -97,12 +97,12 @@ export default function Quotation() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-          className="mt-4 max-w-xl text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/70"
+          className="mt-4 max-w-xl text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/85"
         >
           Every project moves through the same four stages, from first sketch to final coordination on site.
         </motion.p>
 
-        <div className="mt-12 grid grid-cols-1 gap-0 md:grid-cols-4 md:gap-0">
+        <div className="mt-12 grid grid-cols-1 gap-0 lg:grid-cols-4">
           {steps.map((step, index) => (
             <StepCard key={step.number} step={step} index={index} />
           ))}
@@ -115,13 +115,13 @@ export default function Quotation() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mt-14 flex flex-col items-start gap-4 border-t border-ink/10 pt-10 sm:flex-row sm:items-center sm:justify-between"
         >
-          <p className="max-w-md text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/70">
+          <p className="max-w-md text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/85">
             Ready to talk through your space? Reach out and share what you have in mind.
           </p>
           <MotionLink
             href="/#contact"
             whileHover={{ gap: "0.6rem" }}
-            className="eyebrow inline-flex items-center gap-2 text-ink transition-colors hover:text-ink/70"
+            className="eyebrow inline-flex items-center gap-2 text-ink transition-colors hover:text-ink/85"
           >
             Get in touch
             <span aria-hidden>→</span>

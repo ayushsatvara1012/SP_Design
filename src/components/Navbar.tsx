@@ -127,7 +127,7 @@ export default function Navbar() {
             collapsed ? "p-3" : ""
           }`}
         >
-          <Image src="/logo.svg" alt="" width={40} height={40} style={{ height: "auto" }} />
+          <Image src="/logo.svg" alt="" width={40} height={28} />
         </Link>
 
         <AnimatePresence initial={false}>
@@ -168,7 +168,7 @@ export default function Navbar() {
                 onClick={() => setOpen((v) => !v)}
                 aria-expanded={open}
                 aria-label="Toggle navigation menu"
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full md:hidden"
+                className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full md:hidden"
               >
                 <span className="relative block h-3.5 w-4">
                   <span

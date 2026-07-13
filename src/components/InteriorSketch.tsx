@@ -121,7 +121,7 @@ export default function InteriorSketch() {
       className="relative bg-paper md:h-[300vh]"
     >
       <div className="flex flex-col items-center gap-2 px-6 pb-6 pt-10 text-center md:hidden">
-        <span className="eyebrow max-w-[16rem] text-ink/50">
+        <span className="eyebrow max-w-[16rem] text-ink/70">
           The Process — From Single Line to Living Space
         </span>
       </div>
@@ -170,7 +170,7 @@ export default function InteriorSketch() {
         />
 
         <div className="absolute inset-x-0 top-0 hidden flex-col items-center gap-2 px-6 pt-8 text-center md:flex">
-          <span className="eyebrow text-ink/50">
+          <span className="eyebrow text-ink/70">
             The Process — From Single Line to Living Space
           </span>
         </div>

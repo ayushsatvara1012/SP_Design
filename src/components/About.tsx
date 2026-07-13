@@ -42,7 +42,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="eyebrow text-ink/60"
+          className="eyebrow text-ink/75"
         >
           About
         </motion.p>
@@ -84,7 +84,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/70"
+              className="text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/85"
             >
               Founder of SP Designs and a Civil Engineer turned architectural designer and 3D
               visualizer, based in Mansa, Gujarat. Shalini takes a space end-to-end — from
@@ -97,7 +97,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-              className="mt-5 text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/70"
+              className="mt-5 text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/85"
             >
               Also working as Designer &amp; 3D Visualizer at Mark Point, specializing in modern
               residential and luxury interiors alongside exterior architectural visualization.
@@ -120,7 +120,7 @@ export default function About() {
                   <span className="font-display text-[clamp(1.125rem,1rem+0.4vw,1.375rem)] font-light text-ink">
                     {credential.title}
                   </span>
-                  <span className="eyebrow text-ink/50">
+                  <span className="eyebrow text-ink/70">
                     {credential.place} · {credential.period}
                   </span>
                 </motion.div>
@@ -134,12 +134,12 @@ export default function About() {
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
               className="mt-10"
             >
-              <span className="eyebrow text-ink/50">Tools</span>
+              <span className="eyebrow text-ink/70">Tools</span>
               <div className="mt-4 flex flex-wrap gap-2">
                 {tools.map((tool) => (
                   <span
                     key={tool}
-                    className="eyebrow rounded-full border border-ink/20 px-4 py-2 text-ink/70"
+                    className="eyebrow rounded-full border border-ink/20 px-4 py-2 text-ink/85"
                   >
                     {tool}
                   </span>
