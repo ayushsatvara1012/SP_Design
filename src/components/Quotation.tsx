@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 type Step = {
@@ -35,6 +36,8 @@ const steps: Step[] = [
       "Furniture drawings, MEP-adjacent detailing, and coordination handed off to keep the build true to the approved design.",
   },
 ];
+
+const MotionLink = motion.create(Link);
 
 function StepCard({ step, index }: { step: Step; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -80,7 +83,7 @@ export default function Quotation() {
         >
           How To Get A Quote
         </motion.p>
-        <motion.h2
+        <motion.h1
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
@@ -88,7 +91,7 @@ export default function Quotation() {
           className="font-display mt-4 max-w-4xl text-[clamp(2.25rem,1.6rem+3.2vw,4.75rem)] font-light leading-tight tracking-tight text-ink"
         >
           From brief to built
-        </motion.h2>
+        </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -115,14 +118,14 @@ export default function Quotation() {
           <p className="max-w-md text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/70">
             Ready to talk through your space? Reach out and share what you have in mind.
           </p>
-          <motion.a
-            href="#contact"
+          <MotionLink
+            href="/#contact"
             whileHover={{ gap: "0.6rem" }}
             className="eyebrow inline-flex items-center gap-2 text-ink transition-colors hover:text-ink/70"
           >
             Get in touch
             <span aria-hidden>→</span>
-          </motion.a>
+          </MotionLink>
         </motion.div>
       </div>
     </section>

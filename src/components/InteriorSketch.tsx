@@ -146,10 +146,10 @@ export default function InteriorSketch() {
 
         <div ref={renderRef} className="absolute inset-0 opacity-0">
           <Image
-            src="/images/Interior_sketch.png"
+            src="/images/Interior_sketch.webp"
             alt="The living-room interior rendered as a finished, photorealistic space"
             fill
-            quality={92}
+            quality={95}
             sizes="100vw"
             className="object-cover"
           />

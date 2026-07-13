@@ -2,7 +2,10 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
+
+const MotionLink = motion.create(Link);
 
 type Service = {
   number: string;
@@ -86,9 +89,8 @@ function ServiceRow({ service, index }: { service: Service; index: number }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className={`relative aspect-[4/3] w-full overflow-hidden rounded-sm ${
-          reversed ? "md:order-2" : "md:order-1"
-        }`}
+        className={`relative aspect-[4/3] w-full overflow-hidden rounded-sm ${reversed ? "md:order-2" : "md:order-1"
+          }`}
       >
         <motion.div style={{ y }} className="absolute inset-[-10%]">
           <Image
@@ -146,8 +148,9 @@ function ServiceRow({ service, index }: { service: Service; index: number }) {
           {service.description}
         </motion.p>
 
-        <motion.a
-          href="#"
+        <MotionLink
+          href="/work"
+          aria-label={`See ${service.title} work`}
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
@@ -157,7 +160,7 @@ function ServiceRow({ service, index }: { service: Service; index: number }) {
         >
           See more
           <span aria-hidden>→</span>
-        </motion.a>
+        </MotionLink>
       </motion.div>
     </div>
   );

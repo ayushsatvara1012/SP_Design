@@ -46,7 +46,7 @@ export default function About() {
         >
           About
         </motion.p>
-        <motion.h2
+        <motion.h1
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
@@ -54,7 +54,7 @@ export default function About() {
           className="font-display mt-4 max-w-4xl text-[clamp(2.25rem,1.6rem+3.2vw,4.75rem)] font-light leading-tight tracking-tight text-ink"
         >
           Shalini Prajapati
-        </motion.h2>
+        </motion.h1>
 
         <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-16">
           <motion.div
@@ -63,7 +63,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-sm md:order-1"
+            className="relative aspect-[4/5] w-full overflow-hidden rounded-sm md:aspect-auto md:h-full md:order-1"
           >
             <motion.div style={{ y }} className="absolute inset-[-10%]">
               <Image

@@ -2,9 +2,10 @@
 
 Client: Shalini Prajapati, Founder & Designer, SP Designs (Mansa, Gujarat)
 Source material: PORTFOLIO_SHALINI PRAJAPATI.pdf (29 pages), SHALINI_P_CV.pdf
-Status: Phase 1 complete - Navbar, Hero, Services, Designs, Quotation, Contact built on the
-homepage; About built and moved to its own route (see section 5). All sitemap sections have
-real content. See section 15 for current implementation status.
+Status: Phase 1 complete. Pivoted 2026-07-12 (see section 5/9) from single-page scroll to a
+full multi-page site - Services, Designs/Work, Quotation, About, Contact are now each their
+own route, matching how About was already built. See section 15 for current implementation
+status.
 Date: 2026-07-10 (last updated 2026-07-12)
 
 ## 1. Who the client is
@@ -80,24 +81,38 @@ Revised 2026-07-12 per client nav requirements - nav bar links are Services, Des
 Contact (Hero has no nav link, reached via logo/scroll-to-top).
 
 Updated again 2026-07-12: **About was pulled out of the single-page scroll and moved to its own route**
-at `/about` (`src/app/about/page.tsx`), per explicit user request. This is a deliberate exception to the
-"single-page scroll experience" decision in section 9 - About is the only section that routes rather than
-scrolls. The navbar's About link now uses `next/link` to `/about` instead of an in-page `#about` anchor,
-and the logo now links to `/` (was `#hero`) so it resolves correctly from the new route. Section ids in
-code: `hero`, `services`, `designs`, `quotation`, `contact` on the homepage; `about` lives standalone on
-its own page.
+at `/about`, per explicit user request - originally a deliberate one-off exception to the "single-page
+scroll experience" decision in section 9.
 
-1. Hero - brand wordmark, tagline, signature draw-to-render animation, primary CTA.
-2. Services - what she offers (exterior visualization, interior visualization, 2D drafting, MEP-adjacent
-   detailing, furniture documentation - see section 3). Supersedes the old separate Exterior/Interior/Craft
-   sections; these become subsections or filterable groups within Services.
-3. Designs - the portfolio/gallery proper (facades, showroom, hall, living, office, healthcare) with the
-   flagship draw-to-render moment.
-4. Quotation - process + how-to-get-a-quote (absorbs the old "How I Work" 4-step process: brief -> 2D
-   drawing -> 3D render -> execution), positioned as the step before Contact.
-5. About (separate route `/about`, not a homepage scroll section) - short bio, credentials (Nirma, ISRO),
-   tool badges.
-6. Contact - email/phone/location (no inquiry funnel - chatbot owns lead capture, per section 9/13).
+**Pivoted 2026-07-12 (later same day): hybrid multi-page site.** The single-page-scroll decision in
+section 9 is superseded - About's routed pattern was extended to some sections. **Final layout (revised
+2026-07-12, latest): the homepage carries Hero + InteriorSketch + Services + Contact, and only Work,
+Quotation, and About are standalone routes.** `/services` and `/contact` were briefly their own routes
+then removed per explicit user request - Services and Contact are homepage sections again. Live routes:
+`/` (Hero + InteriorSketch + Services + Contact), `/work` (the Designs/portfolio component - route name
+is `work` to match the "Selected Work" copy in `Designs.tsx`), `/quotation`, `/about`. Navbar and Footer
+nav link to real routes for Work/Quotation/About and to homepage anchors `/#services` and `/#contact` for
+the two homepage sections. Cross-page CTAs: Hero's "View the work" -> `/work`, Quotation's "Get in touch"
+-> `/#contact`, each Services row's "See more" -> `/work`.
+
+Implementation: `Navbar` and `Footer` moved into the root layout (`src/app/layout.tsx`) so every route
+gets them for free instead of each `page.tsx` importing/rendering them individually. The standalone content
+routes (`about`, `work`, `quotation`) live under a `(pages)` route group with its own `layout.tsx` that
+adds the `pt-12 md:pt-16` offset so content clears the fixed floating nav pill - Home (`/`) is
+intentionally outside that group since Hero is full-bleed and meant to sit behind the nav.
+
+1. Hero - brand wordmark, tagline, signature draw-to-render animation, primary CTA (opens the `/` route
+   alongside InteriorSketch, Services, and Contact).
+2. Services (homepage section `#services`, component `Services.tsx`) - what she offers (exterior
+   visualization, interior visualization, 2D drafting, MEP-adjacent detailing, furniture documentation -
+   see section 3). Supersedes the old separate Exterior/Interior/Craft sections.
+3. Work (`/work`, component `Designs.tsx`) - the portfolio/gallery proper (facades, showroom, hall,
+   living, office, healthcare) with the flagship draw-to-render moment.
+4. Quotation (`/quotation`) - process + how-to-get-a-quote (absorbs the old "How I Work" 4-step process:
+   brief -> 2D drawing -> 3D render -> execution), positioned as the step before Contact.
+5. About (`/about`) - short bio, credentials (Nirma, ISRO), tool badges.
+6. Contact (`/contact`) - email/phone/location (no inquiry funnel - chatbot owns lead capture, per
+   section 9/13).
 
 Original 7-section breakdown (for reference on content that still needs a home within the sections above):
 About, Exterior Visualization, Interior Visualization, The Craft / Technical Drawings, How I Work.
@@ -158,8 +173,10 @@ Implementation note: use Tailwind's `clamp()`-based fluid type utilities (or a s
 ## 9. Decisions (locked)
 
 - Scope: portfolio showcase only. Lead-gen handled separately by an integrated Vaayu Intelligence chatbot (not our contact-form build).
-- Structure: single-page scroll experience, with one explicit exception - About is a separate route
-  (`/about`), not a scroll section (added 2026-07-12, see section 5).
+- Structure: **hybrid multi-page site** (revised 2026-07-12, supersedes the earlier single-page-scroll
+  decision - see section 5 for the final layout). Home (`/`) carries Hero + InteriorSketch + Services +
+  Contact; only Work, Quotation, and About are standalone routes. (`/services` and `/contact` were
+  briefly routes then folded back into the homepage per user request.)
 - Assets: client will send high-res render exports later. For now, extract low-res renders from the PDF to build a blueprint.
 - Language: English only for now.
 - Contact section stays (email/phone/location) but no inquiry funnel - the chatbot owns lead capture.
@@ -416,11 +433,43 @@ this update).
   the Vaayu Intelligence chatbot instead.
 - Simple footer row (brand name + auto-generated copyright year) closes the section.
 
-### Sitemap (superseded from the original plan - see section 5)
+### Footer (`src/components/Footer.tsx`)
 
-Live section ids in `src/app/page.tsx`: `hero`, `services`, `designs`, `quotation`, `contact`. All have
-real content. `About` lives on its own route at `src/app/about/page.tsx`. **Phase 1 is complete** - next
-up is Phase 2 (GSAP draw-to-render signature moments, see section 10).
+- Originally just the ghost-logo watermark + one-line copyright bar embedded at the bottom of
+  `Contact.tsx`. Extracted into its own component 2026-07-12 so it could be reused outside Contact (the
+  first ask was to add a footer to the then-new `/about` route).
+- Rebuilt into a **professional footer** 2026-07-12 (same day, later) as part of the multi-page routing
+  pivot: a top row (brand wordmark left, "Explore" nav-links column right - Home/Services/Work/Quotation/
+  About/Contact via `next/link`) above a divider, then the copyright line below. Ghost logo mask watermark
+  kept behind both. Scope was explicitly nav-links-only per user choice - no contact-info column, no
+  social/handle row, no separate logo+tagline block were added (all considered and declined).
+- Now rendered once in the root layout (`src/app/layout.tsx`), not per-page.
+
+### Routing pivot: single-page scroll -> full multi-page site (2026-07-12)
+
+Supersedes the single-page-scroll decision in section 9 - see section 5 for full detail. Summary of the
+mechanical changes:
+
+- `Navbar` and `Footer` moved out of individual `page.tsx` files into `src/app/layout.tsx` (rendered once,
+  wrapping `{children}` inside `SmoothScrollProvider`).
+- New routes: `src/app/(pages)/{about,services,work,quotation,contact}/page.tsx`, each a thin wrapper
+  around its existing component (`About`, `Services`, `Designs`, `Quotation`, `Contact`) plus a per-page
+  `metadata.title`. Grouped under `(pages)` (route group, doesn't affect URLs) so a single
+  `src/app/(pages)/layout.tsx` can apply the `pt-12 md:pt-16` fixed-nav clearance to all five at once
+  instead of repeating it per page.
+- `src/app/page.tsx` (Home) now renders only `Hero` + `InteriorSketch` - it's outside the `(pages)` group
+  since Hero is full-bleed and designed to sit behind the nav, unlike the other routes.
+- `Navbar.tsx` `NAV_LINKS` now point at real routes (`/services`, `/work`, `/quotation`, `/about`,
+  `/contact`) instead of `#anchor` hrefs; label for the portfolio link changed from "Designs" to "Work".
+- Cross-page CTAs that used to `#anchor`-jump within the single page now use `next/link`: Hero's "View the
+  work" -> `/work`, Quotation's "Get in touch" -> `/contact`. Both needed `motion.create(Link)` (Framer
+  Motion 12's HOC for wrapping non-DOM components) to keep the existing hover/entrance animations on an
+  actual `<Link>` instead of a plain anchor.
+- `npm run build` confirmed all 6 routes (`/`, `/about`, `/services`, `/work`, `/quotation`, `/contact`)
+  compile and prerender as static content.
+
+Live section ids in the individual components (`hero`, `services`, `designs`, `quotation`, `about`,
+`contact`) are unchanged and harmless now that they're not anchor targets - left as-is, not worth churning.
 
 ### Bugs hit and fixed along the way (useful if similar patterns recur)
 
@@ -449,3 +498,43 @@ up is Phase 2 (GSAP draw-to-render signature moments, see section 10).
 Per section 14 (locked): do not use the Browser pane / `preview_start` on this project. Run
 `npm run build` to confirm changes compile, report what changed, and let the user check visually in
 their own browser - faster for them and has been more reliable than the automated preview tooling here.
+
+## 16. Performance + SEO audit pass (2026-07-12)
+
+First dedicated perf/SEO sweep, done alongside the `/services`+`/contact` route removal.
+
+Performance:
+- **`Interior_sketch.png` 4.5MB -> `Interior_sketch.webp` 540KB** (`cwebp -q 90 -alpha_q 100`, transparent,
+  2816x1536, visually lossless for a render). `InteriorSketch.tsx` now points at the `.webp`. The old PNG
+  was removed (git-tracked, recoverable). `public/images` dropped ~5.8MB -> 1.8MB.
+- **`next.config.ts`: `formats: ['image/avif','image/webp']`** so next/image serves AVIF (LCP win on the
+  Hero) with WebP fallback automatically - no per-component change needed. `qualities` stays `[75, 95]`;
+  InteriorSketch's `quality` was 92 (which silently snapped to 95 anyway) and is now explicit `95`.
+- **`interiorSketchPaths.ts` coordinate precision reduced to 1 decimal** (one-off node regex rounding every
+  `\d+\.\d+`; 0.025px on-screen error at the 2816px viewBox = imperceptible). 97KB -> 84KB (~14%) of
+  client-bundled path data. Re-apply after any re-extraction from the SVG.
+- Removed 5 unused create-next-app scaffold SVGs from `public/` (`file/globe/next/vercel/window.svg`; 0
+  refs). `logo.svg` kept (used by Navbar + Footer watermark).
+
+SEO (all new):
+- `src/lib/site.ts` - single source of truth for name/contact/URL. `SITE_URL` reads
+  `NEXT_PUBLIC_SITE_URL` and falls back to `https://sp-designs.vercel.app` (real domain still TBD - set the
+  env var on deploy).
+- `layout.tsx` metadata: `metadataBase`, `openGraph` (+image = hero.jpg 2816x1536), `twitter`
+  summary_large_image, `robots` (index/follow, max-image-preview:large), keywords, canonical. Title
+  template is `%s` so the per-route `metadata.title` exports pass through unchanged.
+- **JSON-LD `ProfessionalService`** injected in `layout.tsx` (founder, Mansa/Gujarat postal address,
+  email, phone, areaServed) - local-SEO structured data for the studio.
+- `app/sitemap.ts` (/, /work, /quotation, /about) + `app/robots.ts` (allow all, points at sitemap). Both
+  verified in the build output (`/robots.txt`, `/sitemap.xml` generated).
+
+a11y:
+- Each standalone route now has exactly one `<h1>`: promoted the top `h2` -> `h1` in `About.tsx`,
+  `Designs.tsx`, `Quotation.tsx` (tag-only swap, styling unchanged). Services/Contact stay `h2` since
+  they're homepage sections under Hero's `h1`.
+- Services rows' placeholder `See more` `href="#"` -> real `/work` link (via `motion.create(Link)`), with
+  an `aria-label` per row. This closes the section-15 open item ("See more CTA needs a destination once
+  Designs exists").
+
+`npm run build` + `npm run lint` both green; route table: `/`, `/about`, `/quotation`, `/work`,
+`/robots.txt`, `/sitemap.xml`. Not committed (per section 14, user verifies visually first).

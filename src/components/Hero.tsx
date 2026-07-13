@@ -2,7 +2,10 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+
+const MotionLink = motion.create(Link);
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -66,15 +69,15 @@ export default function Hero() {
           architectural and interior design, end to end.
         </motion.p>
 
-        <motion.a
-          href="#services"
+        <MotionLink
+          href="/work"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
           className="mt-7 inline-flex w-fit items-center gap-2 rounded-full border border-paper/30 px-6 py-3 text-[clamp(0.75rem,0.72rem+0.1vw,0.8125rem)] font-medium tracking-wide text-paper transition-colors hover:bg-paper hover:text-ink"
         >
           View the work
-        </motion.a>
+        </MotionLink>
       </div>
     </section>
   );

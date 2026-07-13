@@ -6,11 +6,11 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
 const NAV_LINKS = [
-  { label: "Services", href: "#services" },
-  { label: "Designs", href: "#designs" },
-  { label: "Quotation", href: "#quotation" },
+  { label: "Services", href: "/#services" },
+  { label: "Work", href: "/work" },
+  { label: "Quotation", href: "/quotation" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const HEADER_PADDING_X = 16; // px, matches header's px-4
@@ -117,7 +117,7 @@ export default function Navbar() {
         initial={false}
         animate={{ width: widthAnimate, x: xAnimate }}
         transition={{ width: widthTransition, x: xTransition }}
-        className={`nav-pill relative flex h-16 items-center gap-6 overflow-hidden rounded-full [text-shadow:0_1px_10px_rgba(10,15,30,0.35)] ${
+        className={`nav-pill relative flex h-16 items-center gap-6 overflow-hidden rounded-full [text-shadow:0_1px_3px_rgba(0,0,0,0.5),0_1px_10px_rgba(10,15,30,0.35)] ${
           collapsed ? "justify-center gap-0 px-0" : "justify-between px-6 md:px-8"
         }`}
       >
@@ -145,7 +145,7 @@ export default function Navbar() {
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
+                        className="font-sans text-[var(--font-size-nav)] font-medium text-white transition-colors hover:text-white/80"
                       >
                         {link.label}
                       </Link>
@@ -154,7 +154,7 @@ export default function Navbar() {
                     <li key={link.href}>
                       <a
                         href={link.href}
-                        className="font-sans text-[var(--font-size-nav)] font-medium text-white/85 transition-colors hover:text-white"
+                        className="font-sans text-[var(--font-size-nav)] font-medium text-white transition-colors hover:text-white/80"
                       >
                         {link.label}
                       </a>
@@ -189,7 +189,7 @@ export default function Navbar() {
       </motion.nav>
 
       {open && !collapsed && (
-        <div className="nav-pill absolute top-[calc(100%+0.5rem)] w-[calc(100%-2rem)] max-w-3xl rounded-3xl px-6 py-5 [text-shadow:0_1px_10px_rgba(10,15,30,0.35)] md:hidden">
+        <div className="nav-pill absolute top-[calc(100%+0.5rem)] w-[calc(100%-2rem)] max-w-3xl rounded-3xl px-6 py-5 [text-shadow:0_1px_3px_rgba(0,0,0,0.5),0_1px_10px_rgba(10,15,30,0.35)] md:hidden">
           <ul className="relative z-10 flex flex-col gap-4">
             {NAV_LINKS.map((link) =>
               link.href.startsWith("/") ? (
@@ -197,7 +197,7 @@ export default function Navbar() {
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="font-sans text-[var(--font-size-nav)] font-medium text-white/90"
+                    className="font-sans text-[var(--font-size-nav)] font-medium text-white"
                   >
                     {link.label}
                   </Link>
@@ -207,7 +207,7 @@ export default function Navbar() {
                   <a
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="font-sans text-[var(--font-size-nav)] font-medium text-white/90"
+                    className="font-sans text-[var(--font-size-nav)] font-medium text-white"
                   >
                     {link.label}
                   </a>

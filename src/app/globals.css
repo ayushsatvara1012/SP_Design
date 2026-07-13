@@ -56,9 +56,12 @@ html::-webkit-scrollbar {
 
 .nav-pill {
   overflow: hidden;
+  /* Lightest stop deepened from #aa8a62 so white nav text clears WCAG AA (~4.6:1)
+     across the whole pill - the old highlight only gave ~3.2:1 on light sections.
+     Same warm gold-brown character, still a static treatment (no scroll swap). */
   background: linear-gradient(
     135deg,
-    #aa8a62 0%,
+    #8c714b 0%,
     color-mix(in srgb, var(--accent-indigo) 40%, var(--ink)) 55%,
     var(--ink) 100%
   );

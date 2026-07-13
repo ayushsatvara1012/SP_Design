@@ -125,7 +125,7 @@ export default function Designs() {
         >
           Selected Work
         </motion.p>
-        <motion.h2
+        <motion.h1
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.6 }}
@@ -133,7 +133,7 @@ export default function Designs() {
           className="font-display mt-4 max-w-4xl text-[clamp(2.25rem,1.6rem+3.2vw,4.75rem)] font-light leading-tight tracking-tight text-ink"
         >
           Spaces drawn, then made real
-        </motion.h2>
+        </motion.h1>
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -147,11 +147,10 @@ export default function Designs() {
               key={category}
               type="button"
               onClick={() => setActive(category)}
-              className={`eyebrow rounded-full border px-4 py-2 transition-colors ${
-                active === category
+              className={`eyebrow rounded-full border px-4 py-2 transition-colors ${active === category
                   ? "border-ink bg-ink text-paper"
                   : "border-ink/20 text-ink/60 hover:border-ink/50 hover:text-ink"
-              }`}
+                }`}
             >
               {category}
             </button>
