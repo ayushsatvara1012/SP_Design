@@ -112,6 +112,12 @@ export default function InteriorSketch() {
       ref={wrapperRef}
       className="relative bg-paper md:h-[300vh]"
     >
+      <div className="flex flex-col items-center gap-2 px-6 pb-6 pt-10 text-center md:hidden">
+        <span className="eyebrow max-w-[16rem] text-ink/50">
+          The Process — From Single Line to Living Space
+        </span>
+      </div>
+
       <div
         ref={stageRef}
         className="relative aspect-[2816/1536] w-full overflow-hidden bg-paper md:sticky md:top-0 md:aspect-auto md:h-screen"
@@ -149,10 +155,14 @@ export default function InteriorSketch() {
           />
         </div>
 
-        <div className="absolute left-1/2 top-8 flex -translate-x-1/2 flex-col items-center gap-2 px-6 text-center md:top-12">
-          <span className="eyebrow text-ink/50">The Process</span>
-          <span ref={captionRef} className="eyebrow text-ink/70 opacity-0">
-            From a single line to a living space
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 hidden h-32 bg-gradient-to-b from-paper via-paper/70 to-transparent md:block"
+        />
+
+        <div className="absolute inset-x-0 top-0 hidden flex-col items-center gap-2 px-6 pt-8 text-center md:flex">
+          <span className="eyebrow text-ink/50">
+            The Process — From Single Line to Living Space
           </span>
         </div>
       </div>
