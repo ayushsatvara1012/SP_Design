@@ -22,8 +22,20 @@ const details = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="bg-paper px-6 py-14 md:px-14 md:py-24">
-      <div className="mx-auto max-w-[1400px]">
+    <section id="contact" className="relative overflow-hidden bg-paper px-6 py-14 md:px-14 md:py-24">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-[8%] -right-[6%] z-0 aspect-[20/14] w-[min(85vw,900px)] bg-ink/[0.05]"
+        style={{
+          maskImage: "url(/logo.svg)",
+          WebkitMaskImage: "url(/logo.svg)",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
+        }}
+      />
+      <div className="relative z-10 mx-auto max-w-[1400px]">
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
