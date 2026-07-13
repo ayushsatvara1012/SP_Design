@@ -103,7 +103,15 @@ export default function InteriorSketch() {
       });
     }, wrapperRef);
 
-    return () => ctx.revert();
+    // This component remounts on client-side navigation; its triggers are built here
+    // against a layout whose images/fonts may not have settled yet. Refresh once the
+    // next frame lands so start/end pixels (and Lenis's limit) match the real height.
+    const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -152,6 +160,7 @@ export default function InteriorSketch() {
             quality={95}
             sizes="100vw"
             className="object-cover"
+            onLoad={() => ScrollTrigger.refresh()}
           />
         </div>
 
