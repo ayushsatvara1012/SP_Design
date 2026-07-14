@@ -84,3 +84,22 @@ html::-webkit-scrollbar {
   background-size: 140px 140px;
   pointer-events: none;
 }
+
+/* Magazine-flip fullscreen-reader modal: freeze the page and fade the site
+   chrome so an opened volume reads as a stable, centered modal. The Navbar
+   (<header>) and Footer (<footer>) transition out; scroll is locked. */
+body > header,
+body > footer {
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+body.book-open {
+  overflow: hidden;
+}
+
+body.book-open > header,
+body.book-open > footer {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
