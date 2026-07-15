@@ -1,4 +1,4 @@
-import Quotation from "@/components/Quotation";
+import Quotation from "@/components/quotation/Quotation";
 
 export const metadata = {
   title: "Get a Quote — SP Designs",

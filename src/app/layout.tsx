@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Fraunces, Sora } from "next/font/google";
 import "./globals.css";
-import SmoothScrollProvider from "@/components/SmoothScrollProvider";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
 import { SITE, SITE_URL } from "@/lib/site";
 
 const fraunces = Fraunces({
@@ -107,7 +107,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className="min-h-full flex flex-col bg-paper text-ink font-sans"
+        className="min-h-full flex flex-col bg-paper text-ink font-sans relative"
         suppressHydrationWarning
       >
         <script
@@ -115,9 +115,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <SmoothScrollProvider>
-          <Navbar />
-          <main className="flex flex-1 flex-col">{children}</main>
-          <Footer />
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex flex-1 flex-col">{children}</main>
+            <Footer />
+          </div>
         </SmoothScrollProvider>
       </body>
     </html>

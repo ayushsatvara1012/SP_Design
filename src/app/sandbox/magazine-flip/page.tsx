@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { WORK_CATEGORIES, type WorkCategory } from "@/lib/work";
-import { getLenis } from "@/components/SmoothScrollProvider";
+import { getLenis } from "@/components/common/SmoothScrollProvider";
 
 // ----------------------------------------------------------------------
 // 1. HELPERS

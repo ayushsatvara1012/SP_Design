@@ -1,5 +1,5 @@
-import WorkShowcase from "@/components/WorkShowcase";
-import WorkHero from "@/components/WorkHero";
+import MagazineFlip from "@/components/work/MagazineFlip";
+import WorkHero from "@/components/work/WorkHero";
 
 export const metadata = {
   title: "Work — SP Designs",
@@ -12,7 +12,7 @@ export default function WorkPage() {
   return (
     <>
       <WorkHero />
-      <WorkShowcase />
+      <MagazineFlip />
     </>
   );
 }
