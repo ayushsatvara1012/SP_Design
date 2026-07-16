@@ -50,8 +50,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: SITE.ogImage,
-        width: 2816,
-        height: 1536,
+        width: 1200,
+        height: 630,
         alt: "SP Designs — signature interior render",
       },
     ],

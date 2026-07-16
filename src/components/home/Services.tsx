@@ -14,6 +14,7 @@ type Service = {
   description: string;
   focalPosition: string;
   href: string;
+  image: string;
 };
 
 const services: Service[] = [
@@ -23,7 +24,8 @@ const services: Service[] = [
     description:
       "Photorealistic facades — modern and traditional residences, commercial builds like the Hyundai showroom, and institutional spaces like the Swaminarayan hall.",
     focalPosition: "20% 30%",
-    href: "/work#exterior",
+    href: "/designs#exterior",
+    image: "/images/home_Exterior_thumbnail.webp"
   },
   {
     number: "02",
@@ -31,23 +33,17 @@ const services: Service[] = [
     description:
       "Immersive interior renders across residential living spaces, office interiors, and healthcare reception areas — every material and light captured before a wall is built.",
     focalPosition: "70% 40%",
-    href: "/work#interior",
+    href: "/designs#interior",
+    image: "/images/home_Interior_thumbnail.webp"
   },
   {
     number: "03",
     title: "2D Technical Drafting",
     description:
       "Space planning, layout drawings, residential floor plans, and elevations — the precise technical foundation every render is built on.",
-    focalPosition: "40% 70%",
-    href: "/work#technical",
-  },
-  {
-    number: "04",
-    title: "Furniture Design Documentation",
-    description:
-      "2D furniture drawings derived directly from 3D renders — kitchens, TV units, and joinery — bridging visualization back to fabrication.",
-    focalPosition: "30% 55%",
-    href: "/work#technical",
+    focalPosition: "70% 40%",
+    href: "/designs#technical",
+    image: "/images/home_2d_thumbnail.webp"
   },
 ];
 
@@ -93,12 +89,11 @@ function ServiceRow({ service, index }: { service: Service; index: number }) {
       >
         <motion.div style={{ y }} className="absolute inset-[-10%]">
           <Image
-            src="/images/hero.jpg"
+            src={service.image}
             alt={service.title}
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover"
-            style={{ objectPosition: service.focalPosition }}
+            className="object-contain object-center"
           />
         </motion.div>
         <div className="absolute inset-0 bg-ink/10" />

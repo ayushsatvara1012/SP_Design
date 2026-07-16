@@ -19,5 +19,5 @@ export const SITE = {
   region: "Gujarat",
   country: "IN",
   streetAddress: "SJ Farm House, behind SJ Traders, Kalol-Mansa Road",
-  ogImage: "/images/hero.jpg",
+  ogImage: "/images/og.jpg",
 } as const;

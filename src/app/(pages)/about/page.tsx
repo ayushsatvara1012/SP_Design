@@ -13,7 +13,7 @@ export default function AboutPage() {
     <div className="relative pt-20 md:pt-2 min-h-screen">
       <div className="pointer-events-none absolute inset-0 z-0 opacity-20">
         <Image
-          src="/images/background.jpg"
+          src="/images/background.webp"
           alt="Background Texture"
           fill
           className="object-cover"
