@@ -140,6 +140,15 @@ export default function WorkHero() {
           </span>
           <span
             className="metal-3d-effect font-normal"
+            data-shine-text="made real"
+            style={
+              {
+                // Reuses the section's existing IntersectionObserver, so the
+                // sweep stops repainting once the hero scrolls out of view
+                // rather than looping forever off-screen.
+                "--shimmer-play": inView ? "running" : "paused",
+              } as React.CSSProperties
+            }
           >
             made real
           </span>

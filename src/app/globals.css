@@ -128,7 +128,7 @@ body.book-open > footer {
 @media (prefers-reduced-motion: reduce) {
   .rise-in,
   .shimmer-luxury,
-  .metal-3d-effect {
+  .metal-3d-effect::after {
     animation: none;
   }
 
@@ -175,32 +175,22 @@ body.book-open > footer {
   text-shadow: none !important;
 }
 
-@keyframes metalShimmer {
-  0% {
-    background-position: 
-      0px 0px,
-      -200% center,
-      0px 0px;
-  }
-  100% {
-    background-position: 
-      0px 0px,
-      200% center,
-      0px 0px;
-  }
-}
-
+/*
+ * The gold 3D relief (gradient fill + 9-layer text-shadow) used to live on the
+ * same element as the animated shimmer, so every frame of the infinite
+ * animation forced a repaint of the whole stack - shadows, blend mode, and
+ * noise texture included - even after the hero had scrolled off-screen.
+ *
+ * Split in two: this rule paints the relief once, with no animation. The
+ * sweeping highlight is a separate, shadow-free `::after` layer below, so the
+ * only thing repainting on a loop is a single flat gradient clipped to text -
+ * a small fraction of the original per-frame cost.
+ */
 .metal-3d-effect {
-  background-image: 
+  position: relative;
+  display: inline-block;
+  background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0) 35%,
-      rgba(255, 255, 255, 0.75) 50%,
-      rgba(255, 255, 255, 0) 65%,
-      rgba(255, 255, 255, 0) 100%
-    ),
     linear-gradient(
       to bottom,
       #ffffff 0%,      /* Specular highlight at the top */
@@ -213,13 +203,13 @@ body.book-open > footer {
       #dfc5a3 90%,     /* Bottom gold body */
       #7c5108 100%     /* Soft bottom edge shadow */
     ) !important;
-  background-blend-mode: overlay, normal !important;
-  background-size: 120px 120px, 200% 100%, 100% 100% !important;
+  background-blend-mode: overlay !important;
+  background-size: 120px 120px, 100% 100% !important;
   background-clip: text !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   -webkit-text-stroke: 0.8px rgba(255, 245, 215, 0.9) !important;
-  text-shadow: 
+  text-shadow:
     0 -1px 0px rgba(255, 255, 255, 0.35),      /* Top highlight edge */
     -1px -1px 0px rgba(255, 255, 255, 0.5),    /* Specular highlight edge */
     1px 1px 0px #b89562,                       /* 3D extrusion layers */
@@ -229,6 +219,42 @@ body.book-open > footer {
     5px 5px 6px rgba(0, 0, 0, 0.65),            /* Ambient occlusion shadow */
     0 12px 24px rgba(0, 0, 0, 0.85),            /* Deep drop shadow */
     0 0 30px rgba(229, 169, 59, 0.4) !important; /* Golden aura glow */
-  display: inline-block;
-  animation: metalShimmer 5s linear infinite !important;
+}
+
+@keyframes metalShimmer {
+  from {
+    background-position: -200% center;
+  }
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* The moving highlight. `content: attr(data-shine-text)` duplicates the base
+   text so this pseudo-element clips to the identical glyph shape - keep the
+   two in sync if the copy ever changes (see WorkHero.tsx). Stacks in the same
+   order the single-layer version did: a plain alpha highlight over the base
+   relief, no blend mode needed. */
+.metal-3d-effect::after {
+  content: attr(data-shine-text);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 35%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 255, 255, 0) 65%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  background-position: -200% center;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  pointer-events: none;
+  will-change: background-position;
+  animation: metalShimmer 5s linear infinite;
+  animation-play-state: var(--shimmer-play, running);
 }
