@@ -103,3 +103,132 @@ body.book-open > footer {
   visibility: hidden;
   pointer-events: none;
 }
+
+/* Entrance for above-the-fold copy. Deliberately CSS rather than framer-motion:
+   a JS-driven initial={{opacity:0}} keeps the LCP text invisible until hydration,
+   where this starts on the first paint. */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise-from, 24px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise-in {
+  animation: riseIn var(--rise-duration, 1s) cubic-bezier(0.22, 1, 0.36, 1)
+    var(--rise-delay, 0s) both;
+}
+
+/* MotionConfig reducedMotion="user" only covers framer-motion, so the CSS
+   animations need their own guard. */
+@media (prefers-reduced-motion: reduce) {
+  .rise-in,
+  .shimmer-luxury,
+  .metal-3d-effect {
+    animation: none;
+  }
+
+  .rise-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  body > header,
+  body > footer {
+    transition: none;
+  }
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+.shimmer-luxury {
+  background: linear-gradient(
+    90deg,
+    #dfc5a3 0%,
+    #dfc5a3 35%,
+    #ffffff 50%,
+    #dfc5a3 65%,
+    #dfc5a3 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmer 2s linear infinite;
+}
+
+.sketch-text-effect {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 1px rgba(250, 248, 244, 0.75) !important;
+  text-shadow: none !important;
+}
+
+@keyframes metalShimmer {
+  0% {
+    background-position: 
+      0px 0px,
+      -200% center,
+      0px 0px;
+  }
+  100% {
+    background-position: 
+      0px 0px,
+      200% center,
+      0px 0px;
+  }
+}
+
+.metal-3d-effect {
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 35%,
+      rgba(255, 255, 255, 0.75) 50%,
+      rgba(255, 255, 255, 0) 65%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      #ffffff 0%,      /* Specular highlight at the top */
+      #fff3d1 12%,     /* Light gold reflection */
+      #dfc5a3 30%,     /* Warm body gold */
+      #f5d393 42%,     /* Middle reflection line */
+      #513202 52%,     /* Dark horizon crease shadow */
+      #825812 55%,     /* Core shadow */
+      #ffd37a 78%,     /* Ground reflection bounce */
+      #dfc5a3 90%,     /* Bottom gold body */
+      #7c5108 100%     /* Soft bottom edge shadow */
+    ) !important;
+  background-blend-mode: overlay, normal !important;
+  background-size: 120px 120px, 200% 100%, 100% 100% !important;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  -webkit-text-stroke: 0.8px rgba(255, 245, 215, 0.9) !important;
+  text-shadow: 
+    0 -1px 0px rgba(255, 255, 255, 0.35),      /* Top highlight edge */
+    -1px -1px 0px rgba(255, 255, 255, 0.5),    /* Specular highlight edge */
+    1px 1px 0px #b89562,                       /* 3D extrusion layers */
+    2px 2px 0px #9f7e4f,
+    3px 3px 0px #826338,
+    4px 4px 0px #634720,
+    5px 5px 6px rgba(0, 0, 0, 0.65),            /* Ambient occlusion shadow */
+    0 12px 24px rgba(0, 0, 0, 0.85),            /* Deep drop shadow */
+    0 0 30px rgba(229, 169, 59, 0.4) !important; /* Golden aura glow */
+  display: inline-block;
+  animation: metalShimmer 5s linear infinite !important;
+}

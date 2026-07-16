@@ -2,12 +2,19 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useScroll, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  AnimatePresence,
+  useReducedMotion,
+} from "framer-motion";
 
 const PAIRS = [
-  { sketch: "/images/design_sketch.png", real: "/images/design_real.png" },
-  { sketch: "/images/design_sketch_1.png", real: "/images/design_real_1.png" },
-  { sketch: "/images/design_sketch_2.png", real: "/images/design_real_2.png" },
+  { sketch: "/images/design_sketch.webp", real: "/images/design_real.webp" },
+  { sketch: "/images/design_sketch_1.webp", real: "/images/design_real_1.webp" },
+  { sketch: "/images/design_sketch_2.webp", real: "/images/design_real_2.webp" },
 ];
 
 export default function WorkHero() {
@@ -15,9 +22,26 @@ export default function WorkHero() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<'sketch' | 'real'>('sketch');
+  const [inView, setInView] = useState(true);
+  const prefersReducedMotion = useReducedMotion();
+
+  // The sketch/render cycle is decorative and endless, so don't run it while the
+  // hero is scrolled out of view or when the visitor has asked for less motion.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
+    if (!inView || prefersReducedMotion) return;
+
+    let timeout: ReturnType<typeof setTimeout>;
     if (phase === 'sketch') {
       timeout = setTimeout(() => setPhase('real'), 2000);
     } else {
@@ -27,7 +51,7 @@ export default function WorkHero() {
       }, 2500); // 0.5s transition + 2s hold
     }
     return () => clearTimeout(timeout);
-  }, [phase]);
+  }, [phase, inView, prefersReducedMotion]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -60,8 +84,8 @@ export default function WorkHero() {
               src={PAIRS[currentIndex].sketch}
               alt="SP Designs Portfolio Work Sketch"
               fill
-              priority
-              quality={95}
+              priority={currentIndex === 0}
+              quality={85}
               sizes="100vw"
               className="object-cover object-center contrast-105 saturate-105"
             />
@@ -77,8 +101,8 @@ export default function WorkHero() {
                 src={PAIRS[currentIndex].real}
                 alt="SP Designs Portfolio Work Real"
                 fill
-                priority
-                quality={95}
+                priority={currentIndex === 0}
+                quality={85}
                 sizes="100vw"
                 className="object-cover object-center contrast-105 saturate-105"
               />
@@ -89,42 +113,64 @@ export default function WorkHero() {
       </motion.div>
 
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 md:px-14">
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="font-sans text-[clamp(0.6875rem,0.65rem+0.15vw,0.8125rem)] font-medium tracking-wider text-paper/80 uppercase mb-4"
+        <p
+          className="rise-in font-sans text-[clamp(0.6875rem,0.65rem+0.15vw,0.8125rem)] font-medium tracking-wider text-paper uppercase mb-4"
+          style={
+            {
+              "--rise-from": "12px",
+              "--rise-duration": "0.8s",
+            } as React.CSSProperties
+          }
         >
           Selected Works • SP Designs
-        </motion.p>
+        </p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-          className="font-display max-w-4xl text-[clamp(2.75rem,1.4rem+6vw,7rem)] font-light leading-[1.02] tracking-tight text-paper"
+        <h1
+          className="rise-in font-display max-w-4xl text-[clamp(2.75rem,1.4rem+6vw,7rem)] font-light leading-[1.02] tracking-tight"
+          style={{ "--rise-delay": "0.1s" } as React.CSSProperties}
         >
-          Spaces drawn, then made real
-        </motion.h1>
+          <span
+            style={{
+              color: "rgba(250, 248, 244, 0.85)",
+              WebkitTextStroke: "1px rgba(250, 248, 244, 0.95)",
+              textShadow: "0 0 14px rgba(0,0,0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.25)",
+            }}
+          >
+            Space drawn then{" "}
+          </span>
+          <span
+            className="metal-3d-effect font-normal"
+          >
+            made real
+          </span>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
-          className="mt-5 max-w-lg text-[clamp(1.0625rem,1rem+0.5vw,1.3125rem)] text-paper/80"
+        <p
+          className="rise-in mt-5 max-w-lg text-[clamp(1.0625rem,1rem+0.5vw,1.3125rem)] text-paper"
+          style={
+            {
+              "--rise-from": "16px",
+              "--rise-duration": "0.8s",
+              "--rise-delay": "0.35s",
+            } as React.CSSProperties
+          }
         >
           Explore a curation of signature residential interiors, commercial visualizations, and photorealistic 3D renders.
-        </motion.p>
+        </p>
 
-        <motion.a
+        <a
           href="#designs"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-          className="mt-7 inline-flex w-fit items-center gap-2 rounded-full border border-paper/30 px-6 py-3 text-[clamp(0.75rem,0.72rem+0.1vw,0.8125rem)] font-medium tracking-wide text-paper transition-colors hover:bg-paper hover:text-ink"
+          className="rise-in mt-7 inline-flex w-fit items-center gap-2 rounded-full border border-paper/30 px-6 py-3 text-[clamp(0.75rem,0.72rem+0.1vw,0.8125rem)] font-medium tracking-wide text-paper transition-colors hover:bg-paper hover:text-ink"
+          style={
+            {
+              "--rise-from": "16px",
+              "--rise-duration": "0.8s",
+              "--rise-delay": "0.5s",
+            } as React.CSSProperties
+          }
         >
           Explore projects
-        </motion.a>
+        </a>
       </div>
     </section>
   );

@@ -157,7 +157,7 @@ export default function InteriorSketch() {
             src="/images/Interior_sketch.webp"
             alt="The living-room interior rendered as a finished, photorealistic space"
             fill
-            quality={95}
+            quality={85}
             sizes="100vw"
             className="object-cover"
             onLoad={() => ScrollTrigger.refresh()}

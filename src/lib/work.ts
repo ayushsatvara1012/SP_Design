@@ -5,6 +5,13 @@ export type WorkProject = {
   tag: string;
   description: string;
   images: string[];
+  // Dense technical sheets need a whole page each to stay legible. Defaults to 2.
+  imagesPerPage?: 1 | 2;
+  // Give the opening page entirely to the description, and let the drawings have
+  // full pages of their own.
+  textOnlyOpening?: boolean;
+  // The first image is already the book's cover art; don't repeat it inside.
+  skipCoverImage?: boolean;
 };
 
 export type WorkCategory = {
@@ -12,8 +19,6 @@ export type WorkCategory = {
   eyebrow: string;
   heading: string;
   intro: string;
-  // Technical drawings must not be cropped - they render contained on a light card.
-  fit: "cover" | "contain";
   projects: WorkProject[];
 };
 
@@ -24,7 +29,6 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     heading: "Architectural Exterior Visualization",
     intro:
       "Photorealistic facades that let clients walk the exterior before a foundation is poured - modern and traditional residences, commercial builds, and institutional halls.",
-    fit: "cover",
     projects: [
       {
         title: "Modern Architectural Facade",
@@ -74,13 +78,14 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     heading: "Architectural Interior Visualization",
     intro:
       "Immersive interiors where every material, light, and furniture placement is resolved before a wall goes up - residential living, offices, and healthcare spaces.",
-    fit: "cover",
     projects: [
       {
         title: "Modern Office Space",
         tag: "Commercial",
         description:
           "A detailed 3D visualization of a modern office interior built in 3ds Max and V-Ray. Photorealistic renders showcase space planning, furniture arrangements, material finishes, and lighting concepts - presenting the interior design concept with strong attention to detail.",
+        imagesPerPage: 1,
+        skipCoverImage: true,
         images: [
           "/images/work/interior/office-1.webp",
           "/images/work/interior/office-2.webp",
@@ -106,8 +111,6 @@ export const WORK_CATEGORIES: WorkCategory[] = [
           "/images/work/interior/residential-1.webp",
           "/images/work/interior/residential-2.webp",
           "/images/work/interior/residential-3.webp",
-          "/images/work/interior/residential-4.webp",
-          "/images/work/interior/residential-5.webp",
           "/images/work/interior/residential-6.webp",
         ],
       },
@@ -133,13 +136,14 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     heading: "Architectural Drawings & Details",
     intro:
       "The technical foundation beneath every render - space planning, elevations, MEP-adjacent layouts, and fabrication-ready furniture documentation.",
-    fit: "contain",
     projects: [
       {
         title: "Space Planning & Layouts",
         tag: "Floor Plans",
         description:
           "Efficient layouts that maximize space utilization. Each plan is developed with careful attention to functionality, circulation, proportions, and practical living needs - translating concepts into clear, well-structured architectural plans across ground, first, and upper floors.",
+        imagesPerPage: 1,
+        textOnlyOpening: true,
         images: [
           "/images/work/technical/space-planning-1.webp",
           "/images/work/technical/space-planning-2.webp",
@@ -151,11 +155,13 @@ export const WORK_CATEGORIES: WorkCategory[] = [
         tag: "Elevations",
         description:
           "2D elevation and exterior detail drawings derived directly from 3D renders, including a high-rise building elevation. Each drawing captures the exterior language of the design with the dimensional precision needed for execution.",
+        imagesPerPage: 1,
+        // Presentation order: the high-rise elevation reads last.
         images: [
           "/images/work/technical/elevation-1.webp",
-          "/images/work/technical/elevation-2.webp",
           "/images/work/technical/elevation-3.webp",
           "/images/work/technical/elevation-4.webp",
+          "/images/work/technical/elevation-2.webp",
         ],
       },
       {
@@ -177,6 +183,7 @@ export const WORK_CATEGORIES: WorkCategory[] = [
         tag: "Fabrication",
         description:
           "Detailed 2D furniture drawings developed from 3D renders - wardrobes, kitchens, TV units, and joinery - capturing exact dimensions, joinery details, and material specifications. Each sheet bridges design visualization and fabrication, ready for accurate construction and installation.",
+        imagesPerPage: 1,
         images: [
           "/images/work/technical/furniture-1.webp",
           "/images/work/technical/furniture-2.webp",

@@ -74,24 +74,31 @@ export default function Quotation() {
   return (
     <section id="quotation" className="bg-paper px-6 py-14 md:px-14 md:py-20">
       <div className="mx-auto max-w-[1400px]">
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="eyebrow text-ink/75"
+        {/* Above the fold: animate in CSS so the LCP text paints without waiting
+            for hydration. Everything below stays whileInView on framer-motion. */}
+        <p
+          className="rise-in eyebrow text-ink/75"
+          style={
+            {
+              "--rise-from": "12px",
+              "--rise-duration": "0.7s",
+            } as React.CSSProperties
+          }
         >
           How To Get A Quote
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
-          className="font-display mt-4 max-w-4xl text-[clamp(2.25rem,1.6rem+3.2vw,4.75rem)] font-light leading-tight tracking-tight text-ink"
+        </p>
+        <h1
+          className="rise-in font-display mt-4 max-w-4xl text-[clamp(2.25rem,1.6rem+3.2vw,4.75rem)] font-light leading-tight tracking-tight text-ink"
+          style={
+            {
+              "--rise-from": "16px",
+              "--rise-duration": "0.8s",
+              "--rise-delay": "0.05s",
+            } as React.CSSProperties
+          }
         >
           From brief to built
-        </motion.h1>
+        </h1>
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}

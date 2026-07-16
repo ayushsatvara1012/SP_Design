@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 const FOOTER_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Work", href: "/work" },
+  { label: "Designs", href: "/designs" },
   { label: "Quotation", href: "/quotation" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/#contact" },
@@ -16,8 +15,6 @@ const SERVICES_LINKS = [
   { label: "Exterior Architectural Visualization", href: "/#services" },
   { label: "Interior 3D Visualization", href: "/#services" },
   { label: "2D Technical Drafting", href: "/#services" },
-  { label: "MEP-Adjacent Detailing", href: "/#services" },
-  { label: "Furniture Design Documentation", href: "/#services" },
 ];
 
 import SignatureIcon from "./SignatureIcon";
