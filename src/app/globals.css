@@ -216,8 +216,6 @@ body.book-open > footer {
     2px 2px 0px #9f7e4f,
     3px 3px 0px #826338,
     4px 4px 0px #634720,
-    5px 5px 6px rgba(0, 0, 0, 0.65),            /* Ambient occlusion shadow */
-    0 12px 24px rgba(0, 0, 0, 0.85),            /* Deep drop shadow */
     0 0 30px rgba(229, 169, 59, 0.4) !important; /* Golden aura glow */
 }
 
