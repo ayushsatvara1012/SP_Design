@@ -13,6 +13,12 @@ import Image from "next/image";
 import { WORK_CATEGORIES, type WorkCategory } from "@/lib/work";
 import { getLenis } from "@/components/common/SmoothScrollProvider";
 import OrnateDivider from "@/components/common/OrnateDivider";
+import SoundToggle from "@/components/work/SoundToggle";
+import {
+  playBookHandle,
+  playPageFlip,
+  preloadBookAudio,
+} from "@/lib/bookAudio";
 
 // ----------------------------------------------------------------------
 // 1. HELPERS
@@ -337,6 +343,12 @@ export default function MagazineFlip() {
     };
   }, []);
 
+  // Decode the samples ahead of the first click, so opening a book is not the
+  // thing that waits on the download.
+  useEffect(() => {
+    void preloadBookAudio();
+  }, []);
+
   // Fullscreen-modal lock: freeze smooth-scroll + native scroll and fade the
   // site chrome (navbar/footer) while a volume is open, so the opened book is a
   // stable, centered reader instead of a fixed layer over a scrolling page.
@@ -411,6 +423,7 @@ export default function MagazineFlip() {
       const book = allBooks[activeCategoryIndex];
       if (flippedCount < book.leaves.length) {
         lockFlip();
+        playPageFlip();
         setFlippedCount((c) => c + 1);
       }
     }
@@ -427,6 +440,7 @@ export default function MagazineFlip() {
 
     if (flippedCount > 0) {
       lockFlip();
+      playPageFlip();
       setFlippedCount((c) => c - 1);
     }
   };
@@ -436,10 +450,16 @@ export default function MagazineFlip() {
     if (returnTimer.current) clearTimeout(returnTimer.current);
     setReturningIndex(null);
     // Phase 1: fly the closed book to the centre. Phase 2: swing it open.
+    // The thump lands on the click (which is also what unlocks the audio context
+    // under the autoplay policy); the cover's own flip sounds when it swings.
     setActiveCategoryIndex(idx);
     setFlippedCount(0);
     lockFlip();
-    phaseTimer.current = setTimeout(() => setFlippedCount(1), PHASE_MS);
+    playBookHandle();
+    phaseTimer.current = setTimeout(() => {
+      playPageFlip();
+      setFlippedCount(1);
+    }, PHASE_MS);
   };
 
   const handleClose = () => {
@@ -447,10 +467,14 @@ export default function MagazineFlip() {
     if (returnTimer.current) clearTimeout(returnTimer.current);
     // Phase 1: swing the cover shut at the centre. Phase 2: fly home to the
     // shelf, staying above the backdrop for the whole flight.
+    // Mirror of opening: the cover swings shut, then the book thumps back down
+    // on the shelf when it lands.
     const idx = activeCategoryIndex;
     setFlippedCount(0);
     lockFlip();
+    playPageFlip();
     phaseTimer.current = setTimeout(() => {
+      playBookHandle();
       setReturningIndex(idx);
       setActiveCategoryIndex(null);
       returnTimer.current = setTimeout(() => setReturningIndex(null), 900);
@@ -472,6 +496,7 @@ export default function MagazineFlip() {
 
   return (
     <div id="designs" className="w-full bg-paper font-sans relative">
+      <SoundToggle />
 
 
       {/* STABILIZING BACKDROP: opaque paper layer that hides the grid while a
