@@ -108,10 +108,11 @@ export const WORK_CATEGORIES: WorkCategory[] = [
         description:
           "A selection of 3D visualizations from previous residential projects - living rooms, modular kitchens, dining, and bedrooms - each rendered to convey material, light, and mood with realism.",
         images: [
-          "/images/work/interior/residential-1.webp",
-          "/images/work/interior/residential-2.webp",
-          "/images/work/interior/residential-3.webp",
+          "/images/residential_1.jpeg",
+          "/images/residential_2.jpeg",
           "/images/work/interior/residential-6.webp",
+          "/images/work/interior/residential_7.jpeg",
+          "/images/work/interior/residential_8.jpeg",
         ],
       },
       {
@@ -120,8 +121,8 @@ export const WORK_CATEGORIES: WorkCategory[] = [
         description:
           "A modern reception and waiting area designed for comfort and elegance. The layout keeps circulation smooth while staying welcoming, with material choices and lighting that lend a professional yet warm character - balancing functionality with aesthetics for a strong first impression.",
         images: [
-          "/images/work/interior/healthcare-1.webp",
           "/images/work/interior/healthcare-2.webp",
+          "/images/work/interior/healthcare-1.webp",
           "/images/work/interior/healthcare-3.webp",
           "/images/work/interior/healthcare-4.webp",
           "/images/work/interior/healthcare-5.webp",
@@ -135,7 +136,7 @@ export const WORK_CATEGORIES: WorkCategory[] = [
     eyebrow: "03 — Technical",
     heading: "Architectural Drawings & Details",
     intro:
-      "The technical foundation beneath every render - space planning, elevations, MEP-adjacent layouts, and fabrication-ready furniture documentation.",
+      "The technical foundation beneath every render - space planning, elevations, Electrical and ceiling layouts, and fabrication-ready furniture documentation.",
     projects: [
       {
         title: "Space Planning & Layouts",
@@ -166,14 +167,14 @@ export const WORK_CATEGORIES: WorkCategory[] = [
       },
       {
         title: "Electrical Layouts",
-        tag: "MEP",
+        tag: "Technical",
         description:
           "Electrical layouts for safe, efficient, well-organized power distribution. Detailed placement of lights, switches, sockets, and components, designed to meet safety standards while supporting functional and aesthetic requirements.",
         images: ["/images/work/technical/electrical-1.webp"],
       },
       {
         title: "Ceiling Layout & Design",
-        tag: "MEP",
+        tag: "Technical",
         description:
           "Ceiling detail drawings covering layout, material selection, and decorative elements. The designs focus on functionality, lighting integration, and visual appeal, giving clear guidance for accurate execution during construction.",
         images: ["/images/work/technical/ceiling-1.webp"],

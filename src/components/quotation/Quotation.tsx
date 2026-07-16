@@ -33,7 +33,7 @@ const steps: Step[] = [
     number: "04",
     title: "Execution",
     description:
-      "Furniture drawings, MEP-adjacent detailing, and coordination handed off to keep the build true to the approved design.",
+      "Furniture drawings, Electrical and ceiling plans, coordination handed off to keep the build true to the approved design.",
   },
 ];
 

@@ -15,6 +15,7 @@ type Service = {
   focalPosition: string;
   href: string;
   image: string;
+  fullView?: boolean;
 };
 
 const services: Service[] = [
@@ -22,7 +23,7 @@ const services: Service[] = [
     number: "01",
     title: "Exterior Architectural Visualization",
     description:
-      "Photorealistic facades — modern and traditional residences, commercial builds like the Hyundai showroom, and institutional spaces like the Swaminarayan hall.",
+      "Photorealistic facades — modern and traditional residences, commercial builds like the Hyundai showroom, and hospitality spaces like the Swaminarayan hall.",
     focalPosition: "20% 30%",
     href: "/designs#exterior",
     image: "/images/home_Exterior_thumbnail.webp"
@@ -31,7 +32,7 @@ const services: Service[] = [
     number: "02",
     title: "Interior 3D Visualization",
     description:
-      "Immersive interior renders across residential living spaces, office interiors, and healthcare reception areas — every material and light captured before a wall is built.",
+      "Immersive interior renders across residential living spaces, office interiors, and healthcare spacious areas — every material and light captured before a wall is built.",
     focalPosition: "70% 40%",
     href: "/designs#interior",
     image: "/images/home_Interior_thumbnail.webp"
@@ -43,7 +44,8 @@ const services: Service[] = [
       "Space planning, layout drawings, residential floor plans, and elevations — the precise technical foundation every render is built on.",
     focalPosition: "70% 40%",
     href: "/designs#technical",
-    image: "/images/home_2d_thumbnail.webp"
+    image: "/images/work/technical/2d_render_thumbnail.jpeg",
+    fullView: true
   },
 ];
 
@@ -87,7 +89,10 @@ function ServiceRow({ service, index }: { service: Service; index: number }) {
         className={`relative aspect-[4/3] w-full overflow-hidden rounded-sm ${reversed ? "md:order-2" : "md:order-1"
           }`}
       >
-        <motion.div style={{ y }} className="absolute inset-[-10%]">
+        <motion.div 
+          style={service.fullView ? {} : { y }} 
+          className={service.fullView ? "absolute inset-0" : "absolute inset-[-10%]"}
+        >
           <Image
             src={service.image}
             alt={service.title}
