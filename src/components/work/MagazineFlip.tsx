@@ -269,10 +269,10 @@ function generatePages(category: WorkCategory, isMobile: boolean) {
               }}
             />
             <Image 
-              src="/logo.svg" 
+              src="/logo_sp.svg" 
               alt="SP Designs Logo" 
-              width={40} 
-              height={28} 
+              width={24} 
+              height={39} 
               className="relative z-10 opacity-95" 
             />
           </div>
