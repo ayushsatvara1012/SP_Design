@@ -127,7 +127,7 @@ export default function Navbar() {
             collapsed ? "p-3" : ""
           }`}
         >
-          <Image src="/logo_sp.svg" alt="" width={17} height={28} />
+          <Image src="/logo_sp.svg" alt="" width={28} height={46} />
         </Link>
 
         <AnimatePresence initial={false}>
