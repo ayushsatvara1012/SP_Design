@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Fraunces, Sora } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
@@ -175,6 +176,11 @@ export default function RootLayout({
             <Footer />
           </div>
         </SmoothScrollProvider>
+        <Script
+          src="https://vaayu.sapybase.com/sapybase-loader.js"
+          data-bot-id="sb_3qJijVbtSJ3zlarjGa8Y7zVVxs2F1V6KTFcAggYZTec"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
