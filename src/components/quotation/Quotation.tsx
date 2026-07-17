@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -37,7 +37,64 @@ const steps: Step[] = [
   },
 ];
 
+const faqs = [
+  {
+    question: "What areas do you serve?",
+    answer: "SP Designs is based in Mansa, Gujarat. We primarily serve clients across Mansa, Gandhinagar, Kalol, and Ahmedabad. However, for 2D drafting and 3D architectural visualization, we work with clients and architectural firms remotely across India."
+  },
+  {
+    question: "What inputs are needed to start a 2D or 3D design project?",
+    answer: "To get started, we need the site dimensions, basic requirements (like the number of rooms or specific functions), and any reference images you have for the desired style. If you already have CAD floor plans, we can directly begin 3D modeling and elevation rendering."
+  },
+  {
+    question: "What is the typical turnaround time for a 3D elevation or interior render?",
+    answer: "A standard 3D front elevation or a single room's interior photorealistic render typically takes 3 to 5 working days, depending on the complexity of the design and the number of revisions requested."
+  },
+  {
+    question: "Do you provide site supervision or execution services?",
+    answer: "Yes, for local projects in and around Mansa and Gandhinagar, we offer on-site execution coordination. We provide detailed furniture drawings, electrical layouts, and ceiling plans to ensure the physical build perfectly matches the approved 3D design."
+  }
+];
+
 const MotionLink = motion.create(Link);
+
+function FAQItem({ faq, index }: { faq: typeof faqs[0]; index: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      className="border-b border-ink/10"
+    >
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex w-full items-center justify-between py-6 text-left hover:text-ink/70 transition-colors"
+        aria-expanded={isOpen}
+      >
+        <span className="font-display text-[clamp(1.125rem,1rem+0.5vw,1.375rem)] font-light text-ink pr-6">
+          {faq.question}
+        </span>
+        <motion.span
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-ink/20 text-ink/70"
+        >
+          ↓
+        </motion.span>
+      </button>
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+        className="overflow-hidden"
+      >
+        <p className="pb-6 pr-12 text-[clamp(0.9375rem,0.9rem+0.1vw,1rem)] text-ink/80 leading-relaxed">
+          {faq.answer}
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 function StepCard({ step, index }: { step: Step; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -113,6 +170,28 @@ export default function Quotation() {
           {steps.map((step, index) => (
             <StepCard key={step.number} step={step} index={index} />
           ))}
+        </div>
+
+        {/* FAQ Section */}
+        <div className="mt-24 max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <h2 className="font-display text-[clamp(2rem,1.8rem+1vw,3rem)] font-light leading-tight text-ink mb-2">
+              Frequently asked questions
+            </h2>
+            <p className="text-[clamp(1rem,0.95rem+0.2vw,1.125rem)] text-ink/70 mb-8">
+              Everything you need to know about the process and working together.
+            </p>
+          </motion.div>
+          <div className="flex flex-col border-t border-ink/10">
+            {faqs.map((faq, index) => (
+              <FAQItem key={index} faq={faq} index={index} />
+            ))}
+          </div>
         </div>
 
         <motion.div
