@@ -496,7 +496,11 @@ export default function MagazineFlip() {
 
   return (
     <div id="designs" className="w-full bg-paper font-sans relative">
-      <SoundToggle />
+      <SoundToggle 
+        className={`fixed top-6 z-[100] flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/60 shadow-sm backdrop-blur-sm transition-all duration-500 hover:bg-white hover:text-ink ${
+          activeCategoryIndex !== null ? 'right-[5rem] md:right-[6rem]' : 'right-6 md:right-10'
+        }`}
+      />
 
 
       {/* STABILIZING BACKDROP: opaque paper layer that hides the grid while a

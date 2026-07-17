@@ -44,12 +44,14 @@ const SpeakerOffIcon = () => (
   </svg>
 );
 
-export default function SoundToggle() {
+export default function SoundToggle({ className }: { className?: string }) {
   const muted = useSyncExternalStore(
     subscribeMuted,
     getMuted,
     getMutedServerSnapshot
   );
+
+  const defaultClassName = "fixed top-6 right-6 md:right-10 z-[100] flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/60 shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-ink";
 
   return (
     <button
@@ -58,7 +60,7 @@ export default function SoundToggle() {
       aria-pressed={muted}
       aria-label={muted ? "Unmute book sounds" : "Mute book sounds"}
       title={muted ? "Unmute book sounds" : "Mute book sounds"}
-      className="fixed bottom-6 right-6 z-[100] flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-ink/60 shadow-sm backdrop-blur-sm transition-colors hover:bg-white hover:text-ink"
+      className={className || defaultClassName}
     >
       {muted ? <SpeakerOffIcon /> : <SpeakerOnIcon />}
     </button>
