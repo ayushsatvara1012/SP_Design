@@ -31,7 +31,6 @@ export const metadata: Metadata = {
   creator: SITE.founder,
   keywords: [
     "SP Designs",
-    "Shalini Prajapati",
     "interior design Mansa",
     "interior designer Mansa",
     "3D architectural visualization",
@@ -89,7 +88,6 @@ const jsonLd = {
   email: SITE.email,
   telephone: SITE.phone,
   description: SITE.description,
-  founder: { "@type": "Person", name: SITE.founder },
   address: {
     "@type": "PostalAddress",
     streetAddress: SITE.streetAddress,

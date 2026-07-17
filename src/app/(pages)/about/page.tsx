@@ -4,7 +4,7 @@ import Image from "next/image";
 export const metadata = {
   title: "About — SP Designs",
   description:
-    "Shalini Prajapati — Civil Engineer turned architectural designer and 3D visualizer, founder of SP Designs in Mansa, Gujarat.",
+    "SP Designs is a premier architectural design and 3D visualization agency based in Mansa, Gujarat, specializing in residential and commercial spaces.",
   alternates: { canonical: "/about" },
 };
 
