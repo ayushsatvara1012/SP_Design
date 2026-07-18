@@ -178,7 +178,7 @@ export default function RootLayout({
         </SmoothScrollProvider>
         <Script
           src="https://vaayu.sapybase.com/sapybase-loader.js"
-          data-bot-id="sb_3qJijVbtSJ3zlarjGa8Y7zVVxs2F1V6KTFcAggYZTec"
+          data-bot-id={process.env.NEXT_PUBLIC_SAPYBASE_BOT_ID}
           strategy="lazyOnload"
         />
       </body>
