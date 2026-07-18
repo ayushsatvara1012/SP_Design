@@ -133,6 +133,7 @@ function generatePages(category: WorkCategory, isMobile: boolean) {
               alt="Cover background"
               fill
               priority
+              unoptimized={true}
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover opacity-[0.14] mix-blend-overlay grayscale"
             />
@@ -182,7 +183,7 @@ function generatePages(category: WorkCategory, isMobile: boolean) {
             <div className="flex-1 flex flex-col gap-4 min-h-0 relative">
               {chunk1.map((img, idx) => (
                 <div key={idx} className="flex-1 relative w-full overflow-hidden rounded-sm">
-                  <Image src={img} fill sizes="(max-width: 768px) 100vw, 50vw" priority={pIndex === 0} className="object-contain" alt={p.title} />
+                  <Image src={img} fill sizes="(max-width: 768px) 100vw, 50vw" priority={pIndex === 0} className="object-contain" alt={p.title} unoptimized={true} />
                 </div>
               ))}
             </div>
@@ -209,7 +210,7 @@ function generatePages(category: WorkCategory, isMobile: boolean) {
             <div className="flex-1 flex flex-col gap-4 min-h-0 relative">
               {chunk.map((img, idx) => (
                 <div key={idx} className="flex-1 relative w-full overflow-hidden rounded-sm">
-                  <Image src={img} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-contain" alt={p.title} />
+                  <Image src={img} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-contain" alt={p.title} unoptimized={true} />
                 </div>
               ))}
             </div>
